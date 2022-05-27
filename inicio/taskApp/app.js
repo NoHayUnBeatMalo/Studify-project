@@ -33,6 +33,7 @@ $(document).ready(function () {
 
         }
     });
+    //boton enviar 
     $('#task-form').submit(e => {
         //objeto que guarde los valores de los inputs
         const postData = {
@@ -42,8 +43,10 @@ $(document).ready(function () {
             estado: $('#estado').val(),
             idusuario: idusuario
         };
+
         console.log('postData: ----> ' + JSON.stringify(postData))
         console.log(edit)
+        //definimos donde enviar en funcion de si es editar o añadir 
         let url;
         if (edit === false) {
             url = 'task-add.php';
@@ -53,17 +56,21 @@ $(document).ready(function () {
 
         console.log(url)
         console.log(postData)
+
+        //enviar 
         $.post(url, postData, function (response) {
             console.log('resp: --->' + response)
             fetchTask();
             $('#task-form').trigger('reset');
             $('#estado').attr("hidden", true);
         })
+        //evitar recarga
         e.preventDefault();
     });
-
+    //fetch 
     function fetchTask() {
         console.log(idusuario);
+        //enviar
         $.ajax({
             url: 'task-list.php',
             type: 'GET',
@@ -72,16 +79,16 @@ $(document).ready(function () {
             },
             success: function (response) {
                 console.log(response)
+                //parseamos la respuesta
                 let tasks = JSON.parse(response);
                 console.log(tasks)
                 let templatesinempezar = '';
                 let templateenproceso = '';
                 let templatecompletada = '';
+                //recogida 1 a 1
                 tasks.forEach(task => {
                     if (task.estado == 'EN PROCESO') {
-                        function getRandomArbitrary(min, max) {
-                            return Math.random() * (max - min) + min;
-                          }
+
                         templateenproceso += `
                         <tr taskId= "${task.id}">
                             <td>${task.id}</td>
@@ -89,9 +96,10 @@ $(document).ready(function () {
                             <td>${task.description}</td>
                             <td>${task.estado}
                                 <div class="progress"> 
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: %"></div>
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 65%"></div>
                                 </div>
                             </td>
+                            <td><button class="btn btn-primary puntosClave">Puntos clave</button></td>
                             <td>
                                 <button class="task-delete btn btn-danger">
                                     Delete
@@ -99,15 +107,16 @@ $(document).ready(function () {
                             </td>
                         </tr>
                     `
-                    } else if(task.estado == 'TERMINADO'){
+                    } else if (task.estado == 'TERMINADO') {
                         templatecompletada += `
                         <tr taskId= "${task.id}">
                             <td>${task.id}</td>
                             <td><a href="#" class="task-item">${task.name}</a></td>
                             <td>${task.description}</td>
-                            <td style="background: #5CF951">
-
-                            ${task.estado}</td>
+                            <td >
+                                <button class="btn btn-success " style="background: #5CF951">${task.estado}</td></button>
+                            
+                            <td hidden><button class="btn btn-primary puntosClave"></button></td>
                             <td>
                                 <button class="task-delete btn btn-danger">
                                     Delete
@@ -115,13 +124,15 @@ $(document).ready(function () {
                             </td>
                         </tr>
                     `
-                    }else{
+                    } else {
                         templatesinempezar += `
                         <tr taskId= "${task.id}">
                             <td>${task.id}</td>
                             <td><a href="#" class="task-item">${task.name}</a></td>
                             <td>${task.description}</td>
                             <td>${task.estado}</td>
+                            <td class="td-puntosclave">` + getPuntosClave();
+                        console.log(getPuntosClave()); + `</td>
                             <td>
                                 <button class="task-delete btn btn-danger">
                                     Delete
@@ -139,7 +150,7 @@ $(document).ready(function () {
         });
         edit = false;
     }
-
+    //eliminar tarea 
     $(document).on('click', '.task-delete', function () {
         if (confirm('Are you sure you want to delete it?')) {
             let element = $(this)[0].parentElement.parentElement;
@@ -151,6 +162,7 @@ $(document).ready(function () {
             });
         }
     });
+    //mostrar datos para editar
     $(document).on('click', '.task-item', function () {
         let element = $(this)[0].parentElement.parentElement;
         let id = $(element).attr('taskId');
@@ -167,4 +179,55 @@ $(document).ready(function () {
             edit = true;
         });
     });
+    //modal abrir
+    function abrirModalPuntosClave() {
+        $('#modal_puntosclave').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#modal_puntosclave').modal('show');
+    }
+    $(document).on('click', '.puntosClave', function () {
+        abrirModalPuntosClave();
+    });
+    $(document).on('click', '.td-puntosclave', function () {
+        let element = $(this)[0].parentElement.parentElement;
+        let idtarea = $(element).attr('taskId');
+        getPuntosClave(idtarea);
+        abrirModalPuntosClave()
+    })
+
+    function getPuntosClave(idtarea) {
+
+        $.ajax({
+            url: 'task-list-puntosclave.php',
+            type: 'POST',
+            data: {
+                idusuario,
+                idtarea
+
+            },
+            success: function (response) {
+                console.log('res task list puntos clave: ------> ' + response)
+                let puntosClave = JSON.parse(response);
+                console.log(puntosClave)
+                let template = '';
+                puntosClave.forEach(puntoClave => {
+                    console.log(puntosClave)
+                    console.log('pc:----->' + puntoClave)
+                    if (response == 'undefined') {
+                        template += `
+                                <button class="btn btn-primary puntosClave">Puntos clave</button>
+                        `
+                    } else if (puntosClave.idusu == idusuario) {
+                        descriptionPuntosClave = puntoClave.lista;
+                        console.log(descriptionPuntosClave)
+                    }
+                })
+
+                $('.td-puntosClave').html(template);
+            }
+        });
+
+    }
 });
