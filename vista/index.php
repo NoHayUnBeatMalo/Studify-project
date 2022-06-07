@@ -1,7 +1,12 @@
 <?php
 session_start();
-if (!isset($_SESSION['S_IDUSUARIO'])) {
+if (!isset($_SESSION['S_IDUSUARIO']) || !isset($_SESSION['S_ROL'])) {
     header('Location: ../login/index.php');
+}
+if(isset($_SESSION['S_ROL'])){
+    if($_SESSION['S_ROL'] == '2'){
+        header('Location: ../inicio/index.php?username='. $_SESSION['S_IDUSUARIO']);
+    }
 }
 
 ?>
@@ -66,7 +71,7 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                
+
             </ul>
 
             <!-- Right navbar links -->
@@ -92,7 +97,7 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
                         </form>
                     </div>
                 </li>
-                
+
                 <!-- User dropdown -->
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -139,7 +144,7 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
             <!-- Brand Logo -->
             <a href="../plantila/index3.html" class="brand-link">
                 <img src="../plantilla/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <span class="brand-text font-weight-light">Studify</span>
             </a>
 
             <!-- Sidebar -->
@@ -172,280 +177,88 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-open">
-                            <a onclick="cargar_contenido('contenido_principal', 'usuario/vista_usuario_listar.php')" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+               <li class="nav-header">PANEL DE ADMINISTRADOR</li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active admin">
+                            <i class="fas fa-circle nav-icon"></i>
                                 <p>
-                                    Usuario
-                                    <i class="right fas fa-angle-left"></i>
+                                    Administrador
+                                    <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a onclick="cargar_contenido('contenido_principal', 'usuario/vista_usuario_listar.php')" class="nav-link active admin">
+                                        <i class="nav-icon far fa-circle text-info"></i>
+                                        <p>
+                                            
+                                            Usuario
+                                            
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="cargar_contenido('contenido_principal', 'curso/vista_curso_listar.php')" class="nav-link active admin">
+                                        <i class="nav-icon far fa-circle text-info"></i>
+                                        <p>
+                                            
+                                            Cursos
+                                            
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="cargar_contenido('contenido_principal', 'profesores/vista_profesores_listar.php')" class="nav-link active admin">
+                                        <i class="nav-icon far fa-circle text-info"></i>
+                                        <p>
+                                            
+                                            Profesores
+                                            
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="cargar_contenido('contenido_principal', 'estudiantes/vista_estudiantes_listar.php')" class="nav-link active admin">
+                                        <i class="nav-icon far fa-circle text-info"></i>
+                                        <p>
+                                            
+                                            Estudiantes
+                                            
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        
 
+                        <li class="nav-header">----------------------------------------------</li>
+                        <li class="nav-item">
+                            <a href="../inicio/calendar2/index.php?idu=<?php echo $_SESSION['S_IDUSUARIO'] ?>" class="nav-link">
+                                <i class="nav-icon far fa-calendar-alt"></i>
+                                <p>
+                                    Calendario
+                                </p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../plantilla/pages/widgets.html" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                            <a href='../inicio/taskApp/index.html?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
+                                <i class="nav-icon far fa-image"></i>
                                 <p>
-                                    Widgets
-                                    <span class="right badge badge-danger">New</span>
+                                    Lista de tareas
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href='../inicio/cursos/cursos.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
+                                <i class="nav-icon fas fa-columns"></i>
+                                <p>
+                                    Cursos Studify
                                 </p>
                             </a>
                         </li>
                         
-                        <li class="nav-header">EXAMPLES</li>
-                        <li class="nav-item">
-                            <a href="../inicio/calendar2/index.php?idu=<?php echo $_SESSION['S_IDUSUARIO'] ?>"  class="nav-link">
-                                <i class="nav-icon far fa-calendar-alt"></i>
-                                <p>
-                                    Calendar 
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../inicio/taskApp/index.html?idu=<?php echo $_SESSION['S_IDUSUARIO'] ?>" class="nav-link">
-                                <i class="nav-icon far fa-image"></i>
-                                <p>
-                                    TaskApp
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../inicio/job2Day/job-portal-website-template/index.html?idu=<?php echo $_SESSION['S_IDUSUARIO'] ?>" class="nav-link">
-                                <i class="nav-icon fas fa-columns"></i>
-                                <p>
-                                    Job2Day
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-envelope"></i>
-                                <p>
-                                    Mailbox
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/mailbox/mailbox.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Inbox</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/mailbox/compose.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Compose</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/mailbox/read-mail.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Read</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>
-                                    Pages
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/invoice.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Invoice</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/profile.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Profile</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/e-commerce.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>E-commerce</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/projects.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Projects</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/project-add.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Project Add</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/project-edit.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Project Edit</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/project-detail.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Project Detail</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/contacts.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Contacts</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/faq.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>FAQ</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/contact-us.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Contact us</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-plus-square"></i>
-                                <p>
-                                    Extras
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>
-                                            Login & Register v1
-                                            <i class="fas fa-angle-left right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/login.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Login v1</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/register.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Register v1</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/forgot-password.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Forgot Password v1</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/recover-password.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Recover Password v1</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>
-                                            Login & Register v2
-                                            <i class="fas fa-angle-left right"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/login-v2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Login v2</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/register-v2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Register v2</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/forgot-password-v2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Forgot Password v2</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="../plantilla/pages/examples/recover-password-v2.html" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Recover Password v2</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/lockscreen.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Lockscreen</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/legacy-user-menu.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Legacy User Menu</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/language-menu.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Language Menu</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/404.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Error 404</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/500.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Error 500</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/pace.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pace</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/examples/blank.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Blank Page</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="starter.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Starter Page</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-search"></i>
@@ -469,103 +282,15 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-header">MISCELLANEOUS</li>
                         <li class="nav-item">
-                            <a href="../plantilla/iframe.html" class="nav-link">
-                                <i class="nav-icon fas fa-ellipsis-h"></i>
-                                <p>Tabbed IFrame Plugin</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://adminlte.io/docs/3.1/" class="nav-link">
-                                <i class="nav-icon fas fa-file"></i>
-                                <p>Documentation</p>
-                            </a>
-                        </li>
-                        <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-circle"></i>
+                            <a onclick="cargar_contenido('contenido_principal', 'perfil/vista_perfil.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
+                                <i class="nav-icon fas fa-columns"></i>
                                 <p>
-                                    Level 1
-                                    <i class="right fas fa-angle-left"></i>
+                                    Perfil
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>
-                                            Level 2
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#" class="nav-link">
-                                                <i class="far fa-dot-circle nav-icon"></i>
-                                                <p>Level 3</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Level 2</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-circle nav-icon"></i>
-                                <p>Level 1</p>
-                            </a>
-                        </li>
-                        <li class="nav-header">LABELS</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-circle text-danger"></i>
-                                <p class="text">Important</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-circle text-warning"></i>
-                                <p>Warning</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-circle text-info"></i>
-                                <p>Informational</p>
-                            </a>
-                        </li>
+                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -613,7 +338,7 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
             <strong>Copyright &copy; <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b>Aitor Vázquez García</b> 
+                <b>Aitor Vázquez García</b>
             </div>
         </footer>
 
@@ -743,6 +468,7 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
     <script src="../js/usuario.js"></script>
     <script>
         traer_datos_usuario();
+        get_tipo_usuario(usuarioprincipal);
     </script>
 </body>
 

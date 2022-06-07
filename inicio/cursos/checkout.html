@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script
+    src="https://www.paypal.com/sdk/js?components=buttons,hosted-fields&client-id=AXQvsGgivshx7bN2E-Ft2nKN-k4oRKMGpt_Bhm0byspUqrmWkdinEtigh6U0yNeSN_Uf9pNqZu1QE-iP&currency=EUR"></script>
+</head>
+<body>
+    <div id="paypal-button-container"></div>
+    <script>
+        paypal.Buttons({
+            style:{color: 'blue',
+            shape: 'pill',
+            label: 'pay'
+        },
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: '77.44' 
+              }
+            }]
+          });
+        },
+        onApprove: (data, actions) => {
+            return actions.order.capture().then(function(data) {
+            console.log('Capture result', data);
+            const transaction = data.purchase_units[0].payments.captures[0];
+            alert(`Transaccion ${transaction.status}: ${transaction.id}\n\nMira en la consola para una vista de los detalles`);
+            window.location.href = "completado.html";
+            
+          });
+        },
+        onCancel: function(data){
+            console.log(data)
+        }
+        }).render('#paypal-button-container')
+    </script>    
+</body>
+</html>

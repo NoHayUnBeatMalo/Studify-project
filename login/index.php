@@ -63,6 +63,9 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
 				<div class="text-right p-t-8 p-b-31">
 					<a href="#" onclick="abrir_modal_restablecer()">
 						¿Olvidaste la contrase&ntilde;a?
+					</a><br>
+					<a href="../register/index.php">
+						¿No estás registrado? Registrate
 					</a>
 				</div>
 
@@ -73,6 +76,7 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
 							ENTRAR
 						</button>
 					</div>
+					
 				</div><br>
 
 

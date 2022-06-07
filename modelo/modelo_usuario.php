@@ -1,5 +1,5 @@
 <?php 
- class Modelo_Usuario{
+class Modelo_Usuario{
     private $conexion;
     function __construct(){
         require_once 'modelo_conexion.php';
@@ -19,6 +19,9 @@
             return $arreglo;
             $this->conexion->cerrar();
         }
+    }
+    function getTipoUsuario($idusu){
+
     }
     public function listarUsuario(){
         $con = mysqli_connect('localhost', 'root', '', 'tfg');
@@ -100,6 +103,7 @@
             $this->conexion->cerrar();
         }
     }
+    
 
     function modificarContrasena($idusuario, $contrabd, $contraActual, $contraNueva){
         $contradecrypt = $this->conexion->encrypt_decrypt('decrypt', $contrabd);

@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    const valores = window.location.search;
-    const urlParams = new URLSearchParams(valores);
-    var idusuario = urlParams.get('idu');
-    console.log(idusuario)
+    var idusuario = $('#txtidprincipal').val();
+    console.log('idus: '+idusuario)
     console.log("jQuery is working");
     $('#task-result').hide();
     fetchTask();
+    
 
     $('#search').keyup(function (e) {
 
@@ -68,6 +67,29 @@ $(document).ready(function () {
         e.preventDefault();
     });
     //fetch 
+    function fetchPC(idpuntoclave) {
+        console.log(idusuario);
+        //enviar
+        $.ajax({
+            url: 'task-list-puntosclave.php',
+            type: 'GET',
+            data: {
+                idpuntoclave
+            },
+            success: function (response) {
+                let templatePC = '';
+                if(response != ''){
+                    puntosClaveArray = JSON.parse(response);
+                    console.log(puntosClaveArray)
+                    templatePC = '<button class="btn btn-success" id="verpuntosclave" onclick="'+enviarPuntosClave(puntosClaveArray, idpuntoclave);+'">Ver puntos clave</button>';
+                }else{
+                    templatePC = '<button class="btn btn-primary" onclick="' + abrirModalPuntosClave(); + '">Añadir puntos clave</button>'
+                }
+                console.log(templatePC)
+                $('.td-puntosclave').html(templatePC);
+            }
+        })
+    }
     function fetchTask() {
         console.log(idusuario);
         //enviar
@@ -87,6 +109,8 @@ $(document).ready(function () {
                 let templatecompletada = '';
                 //recogida 1 a 1
                 tasks.forEach(task => {
+                    console.log(task.idpuntosClave) 
+                    console.log(task.id)
                     if (task.estado == 'EN PROCESO') {
 
                         templateenproceso += `
@@ -99,10 +123,15 @@ $(document).ready(function () {
                                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 65%"></div>
                                 </div>
                             </td>
-                            <td><button class="btn btn-primary puntosClave">Puntos clave</button></td>
+                            <td class="td-puntosclave" idpuntoclave = "${task.idpuntosClave}">Ver los puntos clave</td>
                             <td>
                                 <button class="task-delete btn btn-danger">
                                     Delete
+                                </button>
+                            </td>
+                            <td>
+                                <button class="show-cronometro btn btn-primary"><a href="#">
+                                    Cronómetro
                                 </button>
                             </td>
                         </tr>
@@ -116,7 +145,7 @@ $(document).ready(function () {
                             <td >
                                 <button class="btn btn-success " style="background: #5CF951">${task.estado}</td></button>
                             
-                            <td hidden><button class="btn btn-primary puntosClave"></button></td>
+                                <td class="td-puntosclave" idpuntoclave = "${task.idpuntosClave}" hidden>Puntos clave</td>
                             <td>
                                 <button class="task-delete btn btn-danger">
                                     Delete
@@ -131,11 +160,13 @@ $(document).ready(function () {
                             <td><a href="#" class="task-item">${task.name}</a></td>
                             <td>${task.description}</td>
                             <td>${task.estado}</td>
-                            <td class="td-puntosclave">` + getPuntosClave();
-                        console.log(getPuntosClave()); + `</td>
+                            <td class="td-puntosclave" idpuntoclave = "${task.idpuntosClave}">Ver los puntos clave</td>
+                            <button class="task-delete btn btn-danger">
+                                Delete
+                            </button>
+                            </td>
                             <td>
-                                <button class="task-delete btn btn-danger">
-                                    Delete
+                                <button class="show-cronometro btn btn-primary" ><a href="#">Cronómetro</a>
                                 </button>
                             </td>
                         </tr>
@@ -162,6 +193,9 @@ $(document).ready(function () {
             });
         }
     });
+    $(document).on('click', '.show-cronometro', function(){
+        abrirModalCronometro();
+    })
     //mostrar datos para editar
     $(document).on('click', '.task-item', function () {
         let element = $(this)[0].parentElement.parentElement;
@@ -187,47 +221,85 @@ $(document).ready(function () {
         });
         $('#modal_puntosclave').modal('show');
     }
-    $(document).on('click', '.puntosClave', function () {
-        abrirModalPuntosClave();
-    });
-    $(document).on('click', '.td-puntosclave', function () {
+    function abrirModalCronometro() {
+        $('#modal_cronometro').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#modal_cronometro').modal('show');
+    }
+    $(document).on('click', '.btnaddpuntoclave', function(){
         let element = $(this)[0].parentElement.parentElement;
-        let idtarea = $(element).attr('taskId');
-        getPuntosClave(idtarea);
+        console.log(element)
+        let listael = element.firstElementChild.firstElementChild;
+        console.log(listael)
+        let idpc = $(listael).attr('idpclave');
+        console.log(idpc)
+        nuevoitem = $('#addpuntoclave').val();
+        console.log(nuevoitem)
+        $.ajax({
+            url: 'task-add-puntosclave.php',
+            type: 'POST',
+            data:{
+                idpuntoclave:idpc,
+                nuevoitem: nuevoitem,
+                idusuario: idusuario
+            },
+            success: function(res){
+                console.log(res)
+                fetchPC(idpc);
+            }
+        })
+    })
+    $(document).on('click', '.td-puntosclave', function () {
+        let element = $(this)[0];                                
+        console.log(element)
+        let idpuntoclave = $(element).attr('idpuntoclave');
+        console.log(idpuntoclave)
+        getPuntosClave(idpuntoclave);
         abrirModalPuntosClave()
     })
 
-    function getPuntosClave(idtarea) {
-
+    function getPuntosClave(idpuntoclave) {
+        console.log(idpuntoclave)
         $.ajax({
             url: 'task-list-puntosclave.php',
-            type: 'POST',
+            type: 'GET',
             data: {
-                idusuario,
-                idtarea
-
+                idpuntoclave
             },
             success: function (response) {
-                console.log('res task list puntos clave: ------> ' + response)
-                let puntosClave = JSON.parse(response);
-                console.log(puntosClave)
-                let template = '';
-                puntosClave.forEach(puntoClave => {
-                    console.log(puntosClave)
-                    console.log('pc:----->' + puntoClave)
-                    if (response == 'undefined') {
-                        template += `
-                                <button class="btn btn-primary puntosClave">Puntos clave</button>
-                        `
-                    } else if (puntosClave.idusu == idusuario) {
-                        descriptionPuntosClave = puntoClave.lista;
-                        console.log(descriptionPuntosClave)
-                    }
-                })
-
-                $('.td-puntosClave').html(template);
+                console.log(response)
+                
+                let templatePC = '';
+                if(response != ''){
+                    puntosClaveArray = JSON.parse(response);
+                    console.log(puntosClaveArray)
+                    templatePC = '<button class="btn btn-success" id="verpuntosclave" onclick="'+enviarPuntosClave(puntosClaveArray, idpuntoclave);+'">Ver puntos clave</button>';
+                }else{
+                    templatePC = '<button class="btn btn-primary" onclick="' + abrirModalPuntosClave(); + '">Añadir puntos clave</button>'
+                }
+                console.log(templatePC)
+                $('.td-puntosclave').html(templatePC);
             }
+           
         });
 
     }
+    function enviarPuntosClave(array, idpuntoclave){
+        templateLista = '';
+        array.forEach(puntoClave => {
+            console.log(puntoClave);
+            templateLista += '<li class="idPuntoClaveLista" idpclave="' + idpuntoclave + '"><a href="#" class="enlace-pcList-item" style="text-decoration:none;">'+ puntoClave +'</a><button class="btn btn-danger"><i class="fa-solid fa-circle-trash"></i></button></li>'
+            $('#listadoPuntosClave').html(templateLista);
+        })
+    }
+    $(document).on('click', '.enlace-pcList-item', function () {
+        let element = $(this)[0];
+        console.log(element)
+        let idpuntoclave = $(element).attr('idpuntoclave');
+        console.log(idpuntoclave)
+        getPuntosClave(idpuntoclave);
+        abrirModalPuntosClave()
+    })
 });

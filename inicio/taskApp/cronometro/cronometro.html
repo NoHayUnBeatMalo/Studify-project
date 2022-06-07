@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronómetro</title>
+    <link rel="stylesheet" href="cronometro.css">
+    
+</head>
+<body>
+    <main>
+        <div class="circle">
+            <div id="stopwatch" class="stopwatch">00:00</div>
+            <div class="buttons">
+                <div class="stop" onclick="stop()"></div>
+                <div id="play-pause" class="paused" onclick="playPause();"></div>
+            </div>
+        </div>
+        <div class="seconds-sphere" id="seconds-sphere"></div>
+    </main>
+    <script src="cronometro.js"></script>
+</body>
+</html>

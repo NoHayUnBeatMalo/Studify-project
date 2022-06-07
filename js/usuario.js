@@ -64,6 +64,9 @@ function verificarUsuario() {
     })
 }
 var table;
+
+
+
 var listar_usuario = function () {
 
     $.ajax({
@@ -204,7 +207,7 @@ $('#tabla_usuario').on('click', '.editar', function () {
     $("#txt_correo_editar").val(data.correo)
     $("#cbm_rol_editar").val(data.rol).trigger('change')
 })
-
+//modificar estutus usuario
 function modificar_estatus(idusuario, estatus) {
 
     $.ajax({
