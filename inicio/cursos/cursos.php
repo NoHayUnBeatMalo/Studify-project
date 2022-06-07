@@ -26,42 +26,24 @@ $idusuario = $_GET['idu'];
 </head>
 
 <body>
-    <header>
-        <div class="collapse bg-dark" id="navbarHeader">
-            <div class="container">
-                <div class="row">
-
-                </div>
-            </div>
-        </div>
-        <div class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-            <div class="container">
-                <a href="#" class="navbar-brand">
-                    <strong>Tienda online</strong>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarHeader">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Catálogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Contacto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Catálogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Catálogo</a>
-                        </li>
+<nav style="background-color: rgb(106, 199, 70);" class="navbar navbar-expand-lg navbar-light relative-top py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="../index.php?username=<?php echo $idusuario ?>">Studify</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        
+                        <li class="nav-item"><a class="nav-link" href="calendar2/index.php?idu=<?php echo $idusuario ?>">Calendario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="taskApp/index.php?idu=<?php echo $idusuario ?>">Lista de tareas</a></li>
+                        <a class="nav-item"><a class="nav-link" href="cursos/cursos.php?idu=<?php echo $idusuario; ?>">Nuestros cursos</a></a>
+                        
+                        <li class="nav-item"><a class="nav-link" href="perfil/perfil.php?idu=<?php echo $idusuario; ?>">Perfil</a></li>
                     </ul>
-                    <a href="clases/carrito.php" class="btn btn-primary">Carrito<span id="num_cart" class="badge bg-secondary"><?php echo $num_cart; ?></span> </a>
                 </div>
             </div>
-        </div>
-    </header>
+        </nav>
+        <!-- Masthead-->
+        
     <main>
         <h2>
             <center>Nuestros cursos</center>
@@ -69,24 +51,12 @@ $idusuario = $_GET['idu'];
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <?php foreach ($resultado as $row) {
-                    echo $row['idimgfk']; ?>
+                    $row['idimgfk']; ?>
 
                     <div class="col">
                         <div class="card shadow-sm" cod_curso="<?php $row['cod_curso']; ?>">
-                            <?php
-                            $sqlImages = $con->prepare("SELECT images.image FROM tfg.images WHERE idimg='" . $row['idimgfk'] . "';");
-                            $sqlImages->execute();
-                            if ($sqlImages->rowCount() > 0) {
-
-                                $imgData = $sqlImages->fetchAll(PDO::FETCH_ASSOC);
-
-                                //Render image
-                                header("Content-type: image/jpg");
-                                echo $imgData['image'];
-                            } else {
-                                echo 'Image not found...';
-                            }
-                            ?>
+                        
+                            
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $row['nombre_curso']; ?></h5>
                                 <p class="card-text"><?php echo $row['descripcion']; ?></p>

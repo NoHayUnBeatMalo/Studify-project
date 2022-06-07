@@ -304,7 +304,6 @@ function registrar_usuario() {
     var correo = $('#txt_correo').val();
     var con1 = $('#txt_con1').val();
     var con2 = $('#txt_con2').val();
-    var rol = document.getElementById('cbm_rol').value;
     var sexo = document.getElementById('cbm_sexo').value;
     console.log(usu)
     console.log(nombre)
@@ -313,9 +312,8 @@ function registrar_usuario() {
     console.log(correo)
     console.log(con1)
     console.log(con2)
-    console.log(rol)
     console.log(sexo)
-    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || con1.length == 0 || con2.length == 0 || rol.length == 0 || sexo.length == 0) {
+    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || con1.length == 0 || con2.length == 0 || sexo.length == 0) {
         return Swal.fire({
             icon: 'error',
             title: 'Mensaje de advertencia',

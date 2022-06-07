@@ -100,20 +100,7 @@ if ($comparador == 0) {
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarHeader">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Catálogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Contacto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Catálogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link active">Catálogo</a>
-                        </li>
-                    </ul>
+                    
                     <a href="clases/carrito.php" class="btn btn-primary">Carrito<span id="num_cart" class="badge bg-secondary"><?php print $num_cart; ?></span> </a>
                 </div>
             </div>
@@ -197,7 +184,6 @@ if ($comparador == 0) {
 
                     <div class="d-grid gap-3 col-10 mx-auto">
                         <button type="button" class="btn btn-primary">Comprar ahora</button>
-                        <button type="button" class="btn btn-secondary" onclick="abrirModalCupon()">Aplicar cupón de descuento</button>
                         <button type="button" class="btn btn-outline-primary" onclick="addProducto('<?php echo $id; ?>', '<?php echo $token_tmp; ?>')">Añadir a la lista de deseos</button>
 
                     </div>
@@ -334,6 +320,7 @@ if ($comparador == 0) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
 
     </script>
+    <script src="js/curso.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <script>
         function abrirModalCupon() {
@@ -359,26 +346,7 @@ if ($comparador == 0) {
 
         });
 
-        function addProducto(id, token) {
-            const url = 'clases/carrito.php';
-            let formData = new FormData();
-            formData.append('id', id);
-            formData.append('token', token);
-            fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'cors'
-                }).then(response => {
-                    console.log(response);
-                    console.log(response.body.getReader())
-                    console.log(response.ok)
-                    console.log(response.numero)
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-
-        }
+        
     </script>
 </body>
 

@@ -11,14 +11,26 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a href="#" class="navbar-brand">Lista de tareas</a>
-        <form class="form-inline my-2 my-lg-0">
-            <input type="search" id="search" class="form-control mr-sm-2" placeholder="Search your task">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Buscar</button>
-        </form>
-
-    </nav>
+    <header style="background-color: rgb(106, 199, 70);" class="relative-top">
+        <nav class="navbar navbar-expand-lg navbar-light  py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="../index.php?username=<?php echo $idusuario ?>">Studify</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        
+                        <li class="nav-item"><a class="nav-link" href="calendar2/index.php?idu=<?php echo $idusuario ?>">Calendario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="taskApp/index.php?idu=<?php echo $idusuario ?>">Lista de tareas</a></li>
+                        <a class="nav-item"><a class="nav-link" href="cursos/cursos.php?idu=<?php echo $idusuario; ?>">Nuestros cursos</a></a>
+                        <li class="nav-item"><a class="nav-link" href="perfil/perfil.php?idu=<?php echo $idusuario; ?>">Perfil</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Masthead-->
+    
     <div class="container p-4">
         <div class="row">
             <div class="col-md-5">

@@ -1,14 +1,19 @@
-/*
-function aplicarCuponDescuento(){
-    var cupon = $('#txt_cupon').val()
-    console.log(cupon)
-    let url = '../clases/cupon.php';
-    $.post(url, cupon, function (response) {
-        console.log('resp: --->' + response)
-        fetch();
-        $('#task-form').trigger('reset');
-        $('#estado').attr("hidden", true);
-    })
-    cupon = $('#txt_cupon').val('')
+function addProducto(id, token) {
+    const url = 'clases/carrito.php';
+    let formData = new FormData();
+    formData.append('id', id);
+    formData.append('token', token);
+    fetch(url, {
+            method: 'POST',
+            body: formData,
+            mode: 'cors'
+        }).then(response => response.json())
+        .then(data => {
+            if( data.ok ){
+                let elemento = document.getElementById('num_cart');
+                elemento.innerHTML = data.numero;
+            }
+})
+        
+
 }
-*/

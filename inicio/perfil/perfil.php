@@ -47,18 +47,19 @@ $usuario = $_GET['idu'];
 
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="#page-top">Studify</a>
+            <a class="navbar-brand" href="../index.php?username=<?php echo $idusuario ?>">Studify</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
 
-                    <li class="nav-item"><a class="nav-link" href="calendar2/index.php?idu=<?php echo $idusuario ?>">Calendario</a></li>
-                    <li class="nav-item"><a class="nav-link" href="taskApp/index.html?idu=<?php echo $idusuario ?>">Lista de tareas</a></li>
-                    <a class="nav-item"><a class="nav-link" href="cursos/cursos.php?idu=<?php echo $idusuario; ?>">Nuestros cursos</a></a>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../calendar2/index.php?idu=<?php echo $idusuario ?>">Calendario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../taskApp/index.php?idu=<?php echo $idusuario ?>">Lista de tareas</a></li>
+                    <a class="nav-item"><a class="nav-link" href="../cursos/cursos.php?idu=<?php echo $idusuario; ?>">Nuestros cursos</a></a>
+                    
                     <li class="nav-item"><a class="nav-link" href="perfil/perfil.php?idu=<?php echo $idusuario; ?>">Perfil</a></li>
                 </ul>
             </div>
+
         </div>
     </nav>
     <!-- Masthead-->
@@ -75,6 +76,7 @@ $usuario = $_GET['idu'];
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Perfil de usuario</h4>
+                        <div class="mt-5 top-right"><a class="btn btn-danger sesionclose-button" type="button" href="../../controlador/usuario/controlador_cerrar_session.php">Cerrar sesión</a></div>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-12"><label class="labels">Nombre de usuario</label><input type="text" class="form-control" id="txt_nombreusu" value="" placeholder="Nombre de usuario"></div>
@@ -84,7 +86,7 @@ $usuario = $_GET['idu'];
                     <div class="row mt-3">
                         <div class="col-md-12"><label class="labels">Correo electrónico</label><input type="text" class="form-control" id="txt_correo"placeholder="Ingresa tu correo electrónico" value=""></div>
                         <div class="col-md-12"><label class="labels">Rol</label><input type="text" class="form-control" id="txt_rolid" placeholder="Habla con un administrador para cambiar tu rol" value="" readonly></div>
-                        <div class="col-md-12"><label class="labels">Sexo</label><input type="text" id="txt_sexo" class="form-control col-md-8"><button id="btn btn-sexo" class="col-md-4 form-control btn-secondary">Cambiar</button></div>
+                        <div class="col-md-12"><label class="labels">Sexo</label><input type="text" id="txt_sexo" class="form-control col-md-8" readonly><button class="btn btn-sexo" class="col-md-4 form-control btn-secondary">Cambiar</button></div>
                         <div class="col-md-12"><label class="labels">Tipo de usuario</label><input type="text" class="form-control" id="txt_tipousuario" placeholder="enter address line 2" value="" readonly></div>
                         <div class="col-md-12"><label class="labels">Estado</label><input type="text" class="form-control" id="txt_estado" placeholder="enter address line 2" value="ACTIVO" readonly></div>
                         <div class="col-md-12"><label class="labels">Número de identificador único</label><input type="text" class="form-control" id="txt_idusu" value="" readonly></div>
@@ -92,6 +94,7 @@ $usuario = $_GET['idu'];
                     </div>
 
                     <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Actualizar el perfil</button></div>
+                    
                 </div>
             </div>
             <div class="col-md-4">

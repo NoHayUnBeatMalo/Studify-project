@@ -7,20 +7,20 @@ $(document).ready(function () {
 
     function traerDatosUsuario(idusuario){
         templateProfesor = `
-                    <div class="col-md-12"><label class="labels">Identificador del profesor</label><input type="text" class="form-control" id="txt_p_idpro" placeholder="experience" value="" readonly></div> <br>
-                    <div class="col-md-12"><label class="labels">Nombre profesor</label><input type="text" class="form-control" id="txt_p_nombrepro" placeholder="experience" value="" readonly></div> <br>
-                    <div class="col-md-12"><label class="labels">Teléfono</label><input type="text" class="form-control" id="txt_p_tel" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Provincia</label><input type="text" class="form-control" id="txt_p_provincia" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Población</label><input type="text" class="form-control" id="txt_p_poblacion" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Código postal</label><input type="text" class="form-control" id="txt_p_codpostal" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Identificador del profesor</label><input type="text" class="form-control" id=" " placeholder="experience" value="" readonly></div> <br>
+                    <div class="col-md-12"><label class="labels">Nombre profesor</label><input type="text" class="form-control" id="txt_nombrepro" placeholder="experience" value="" readonly></div> <br>
+                    <div class="col-md-12"><label class="labels">Teléfono</label><input type="text" class="form-control" id="txt_tel" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Provincia</label><input type="text" class="form-control" id="txt_provincia" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Población</label><input type="text" class="form-control" id="txt_poblacion" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Código postal</label><input type="text" class="form-control" id="txt_codpostal" placeholder="experience" value=""></div> <br>
                     
                     `;
                     templateEstudiante = `
-                    <div class="col-md-12"><label class="labels">Identificador del estudiante</label><input type="text" class="form-control" id="txt_e_idest" placeholder="experience" value="" readonly></div> <br>
-                    <div class="col-md-12"><label class="labels">Teléfono</label><input type="text" class="form-control" id="txt_e_tel" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Provincia</label><input type="text" class="form-control" id="txt_e_provincia" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Población</label><input type="text" class="form-control" id="txt_e_poblacion" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Código postal</label><input type="text" class="form-control" id="txt_e_codpostal" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Identificador del estudiante</label><input type="text" class="form-control" id="txt_idest" placeholder="experience" value="" readonly></div> <br>
+                    <div class="col-md-12"><label class="labels">Teléfono</label><input type="text" class="form-control" id="txt_tel" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Provincia</label><input type="text" class="form-control" id="txt_provincia" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Población</label><input type="text" class="form-control" id="txt_poblacion" placeholder="experience" value=""></div> <br>
+                    <div class="col-md-12"><label class="labels">Código postal</label><input type="text" class="form-control" id="txt_codpostal" placeholder="experience" value=""></div> <br>
                     
                     `;
 
@@ -107,6 +107,47 @@ $(document).ready(function () {
             }
         })
     }
+    $('.profile-button').on('click', function(){
+        nombreusuario = $('#txt_nombreusu').val();
+        nombre = $('#txt_nombre').val();
+        apellidos = $('#txt_apellidos').val();
+        corr = $('#txt_correo').val();
+        telefono = $('#txt_tel').val();
+        provincia = $('#txt_provincia').val();
+        poblacion = $('#txt_poblacion').val();
+        codigopostal = $('#txt_codpostal').val();
+        console.log(nombreusuario, nombre, apellidos, corr)
 
+        $.ajax({
+            url: 'update_datos.php',
+            data: {
+                idusuario ,nombreusuario, nombre, apellidos, correo: corr, telefono, provincia, poblacion, codigopostal
+            }, type: 'POST',
+            success: function(resp){
+                traerDatosUsuario(idusuario)
+            }
+            
+        }
+        )
+    })
+    $('.btn-sexo').on('click', function(){
+        
+        sexo = $('#txt_sexo').val();
+        console.log(sexo)
+
+        $.ajax({
+            url: 'cambiarsexo.php',
+            data: {
+                idusuario, sexo
+            }, type: 'POST',
+            success: function(resp){
+                console.log('onclick'+resp)
+                traerDatosUsuario(idusuario)
+            }
+            
+        }
+        )
+    })
+    
 
 })
