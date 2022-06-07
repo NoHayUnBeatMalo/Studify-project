@@ -2,10 +2,10 @@
     require_once '../../modelo/modelo_conexion.php';
     
     $idusuario = $_POST['idusuario'];
-    function traerDatosUsuario($idusuario){
+    function traerDatosProfesor($idusuario){
         $con = new conexion();
         $con->conectar();
-        $sql = "SELECT * FROM usuarios WHERE idusuario='$idusuario'";
+        $sql = "SELECT * FROM profesores WHERE id_usuario_profesor='$idusuario'";
         $arreglo = array();
         $consulta = $con->consulta($sql);
         if(!$consulta){
@@ -17,7 +17,7 @@
         }
     }
     
-    echo traerDatosUsuario($idusuario);
+    echo traerDatosProfesor($idusuario);
 
 
 

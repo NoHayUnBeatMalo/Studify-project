@@ -69,7 +69,7 @@ $usuario = $_GET['idu'];
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img id="img_profile" class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold" id="nombre_usuario_left"></span><span class="text-black-50" id="correo_usu"></span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
@@ -77,21 +77,17 @@ $usuario = $_GET['idu'];
                         <h4 class="text-right">Perfil de usuario</h4>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-md-12"><label class="labels">Nombre de usuario</label><input type="text" class="form-control" value="<?php echo $_SESSION['S_USER'] ?>" placeholder="Nombre de usuario"></div>
-                        <div class="col-md-12"><label class="labels">Nombre</label><input type="text" class="form-control" placeholder="Nombre" value=""></div>
-                        <div class="col-md-12"><label class="labels">Apellidos</label><input type="text" class="form-control" placeholder="Apellidos" value=""></div>
+                        <div class="col-md-12"><label class="labels">Nombre de usuario</label><input type="text" class="form-control" id="txt_nombreusu" value="" placeholder="Nombre de usuario"></div>
+                        <div class="col-md-12"><label class="labels">Nombre</label><input type="text" class="form-control" id="txt_nombre" placeholder="Nombre" value=""></div>
+                        <div class="col-md-12"><label class="labels">Apellidos</label><input type="text" class="form-control" id="txt_apellidos" placeholder="Apellidos" value=""></div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12"><label class="labels">Correo electrónico</label><input type="text" class="form-control" placeholder="Ingresa tu correo electrónico" value=""></div>
-                        <div class="col-md-12"><label class="labels">Rol</label><input type="text" class="form-control" placeholder="Habla con un administrador para cambiarlo" value="<?php if ($_SESSION['S_ROL'] == 2) {
-                                                                                                                                                                                            echo 'INVITADO';
-                                                                                                                                                                                        } else {
-                                                                                                                                                                                            echo 'ADMINISTRADOR';
-                                                                                                                                                                                        } ?>" readonly></div>
-                        <div class="col-md-12"><label class="labels">Sexo</label><select class="form-control"></select></div>
-                        <div class="col-md-12"><label class="labels">Tipo de usuario</label><input type="text" class="form-control" placeholder="enter address line 2" value="" readonly></div>
-                        <div class="col-md-12"><label class="labels">Estado</label><input type="text" class="form-control" placeholder="enter address line 2" value="ACTIVO" readonly></div>
-                        <div class="col-md-12"><label class="labels">Número de identificador único</label><input type="text" class="form-control" value="<?php echo $_SESSION['S_IDUSUARIO']; ?>" readonly></div>
+                        <div class="col-md-12"><label class="labels">Correo electrónico</label><input type="text" class="form-control" id="txt_correo"placeholder="Ingresa tu correo electrónico" value=""></div>
+                        <div class="col-md-12"><label class="labels">Rol</label><input type="text" class="form-control" id="txt_rolid" placeholder="Habla con un administrador para cambiar tu rol" value="" readonly></div>
+                        <div class="col-md-12"><label class="labels">Sexo</label><input type="text" id="txt_sexo" class="form-control col-md-8"><button id="btn btn-sexo" class="col-md-4 form-control btn-secondary">Cambiar</button></div>
+                        <div class="col-md-12"><label class="labels">Tipo de usuario</label><input type="text" class="form-control" id="txt_tipousuario" placeholder="enter address line 2" value="" readonly></div>
+                        <div class="col-md-12"><label class="labels">Estado</label><input type="text" class="form-control" id="txt_estado" placeholder="enter address line 2" value="ACTIVO" readonly></div>
+                        <div class="col-md-12"><label class="labels">Número de identificador único</label><input type="text" class="form-control" id="txt_idusu" value="" readonly></div>
 
                     </div>
 
@@ -100,9 +96,10 @@ $usuario = $_GET['idu'];
             </div>
             <div class="col-md-4">
                 <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-                    <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-                    <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
+                    <div class="d-flex justify-content-between align-items-center experience"><span id="tipo"></span></div><br>
+                    <div id="seccionTipoUsu">
+
+                    </div>
                 </div>
             </div>
         </div>
