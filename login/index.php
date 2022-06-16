@@ -1,7 +1,9 @@
 <?php
 session_start();
-if (isset($_SESSION['S_IDUSUARIO'])) {
+if (isset($_SESSION['S_IDUSUARIO']) && $_SESSION['S_ROL'] == 'INVITADO')  {
 	header('Location: ../vista/index.php');
+}else if(isset($_SESSION['S_IDUSUARIO']) && $_SESSION['S_ROL'] == 'ADMINISTRADOR'){
+	header('Location: ../inicio/index.php');
 }
 
 
@@ -59,15 +61,7 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
 					<input class="input100" type="password" name="pass" placeholder="Escriba la contrase&ntilde;a" id="txt_con">
 					<span class="focus-input100" data-symbol="&#xf190;"></span>
 				</div><br><br>
-<!--
-				<div class="text-right p-t-8 p-b-31">
-					<a href="#" onclick="abrir_modal_restablecer()">
-						¿Olvidaste la contrase&ntilde;a?
-					</a><br>
-					<a href="../register/index.php">
-						¿No estás registrado? Registrate
-					</a>
-				</div>-->
+
 
 				<div class="container-login100-form-btn">
 					<div class="wrap-login100-form-btn">
@@ -79,61 +73,11 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
 					
 				</div><br>
 
-<!--
-				<div class="flex-c-m">
-					<a href="#" class="login100-social-item bg1">
-						<i class="fa fa-facebook"></i>
-					</a>
 
-					<a href="#" class="login100-social-item bg2">
-						<i class="fa fa-twitter"></i>
-					</a>
-
-					<a href="#" class="login100-social-item bg3">
-						<i class="fa fa-google"></i>
-					</a>
-				</div>
-
-
-			</div>
-		</div>
-	</div>
-	-->
 
 
 	<div id="dropDownSelect1">
-	</div><!--
-	<div class="modal fade" id="modal_restablecer_contra" role="dialog">
-		<div class="modal-dialog modal-sm" style="max-width: 750px!important;">
-			<div class="modal-content">
-
-				<!-- Modal Header 
-				<div class="modal-header">
-					<h4 class="modal-title">Restablecer contrase&ntilde;a</h4>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
-
-				<!-- Modal body
-
-				<div class="modal-body col-lg-12">
-					<div class="col-lg-12">
-						<label for="txt_usu"><b>Ingrese el email registrado en el usuario para enviarle su contrase&ntilde;a restablecida</b></label>
-						<input type="text" class="form-control col-lg-24" id="txt_email_restablecer_contra" placeholder="Ingrese email"><br>
-					</div>
-				</div>
-
-
-
-				<!-- Modal footer
-				<div class="modal-footer">
-					<button class="btn btn-primary" onclick="restablecer_contrasena(); console.log('onclick');">Enviar</button>
-					<button type="button" class="btn btn-danger" id="btn-modal-close" data-dismiss="modal">Cerrar</button>
-				</div>
-
-			</div>
-		</div>
 	</div>
-	-->
 
 	<!--===============================================================================================-->
 	<script src="vendor/sweetalert2/sweetalert2.js"></script>

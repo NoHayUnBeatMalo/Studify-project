@@ -1,19 +1,18 @@
-<?php 
+<?php
 
 require '../../modelo/modelo_cursos.php';
 
 $MC = new Modelo_Cursos();
-$nombrecurso = htmlspecialchars($_POST['nombrecurso'], ENT_QUOTES, 'UTF-8');
-$nombreprofesor  = htmlspecialchars($_POST['nombreprofesor'], ENT_QUOTES, 'UTF-8');
-$horas = htmlspecialchars($_POST['horas'], ENT_QUOTES, 'UTF-8');
-$precio = htmlspecialchars($_POST['precio'], ENT_QUOTES, 'UTF-8');
 
+    
+    
+    $nombrecurso = htmlspecialchars($_POST['nombrecurso'], ENT_QUOTES, 'UTF-8');
+    $idprofesor = htmlspecialchars($_POST['idprofesor'], ENT_QUOTES, 'UTF-8');
+    $fechacurso = htmlspecialchars($_POST['fechacurso']);
+    $precio = htmlspecialchars($_POST['precio'], ENT_QUOTES, 'UTF-8');
+    $descripcion = htmlspecialchars($_POST['descripcion'], ENT_QUOTES, 'UTF-8');
+    $descuento = htmlspecialchars($_POST['descuento'], ENT_QUOTES, 'UTF-8');
+    $consulta = $MC->registrarCurso($idprofesor, $nombrecurso, $descripcion, $precio, $descuento, $fechacurso);
 
-
-$consulta = $MC->registrarCurso($nombrecurso, $nombreprofesor, $horas, $precio);
 
 echo $consulta;
-
-
-
-?>

@@ -20,9 +20,15 @@ class Modelo_Usuario{
             $this->conexion->cerrar();
         }
     }
-    function getTipoUsuario($idusu){
-
+    function cambiarTipoId($idusuario, $tipo){
+        $consulta = $this->conexion->consulta("UPDATE usuarios SET tipo_id=".$tipo." WHERE idusuario=".$idusuario.";");
+        if(!$consulta){
+            echo 1;
+        }else{
+            echo 0;
+        }
     }
+    
     public function listarUsuario(){
         $con = mysqli_connect('localhost', 'root', '', 'tfg');
         $sql = "SELECT usuarios.idusuario, usuarios.nombre_usuario, usuarios.nombre, usuarios.apellidos, usuarios.fecha_nacimiento, usuarios.correo, usuarios.estado, rol.rol_nombre FROM usuarios INNER JOIN rol ON usuarios.rol_id = rol.rol_id";
@@ -40,7 +46,10 @@ class Modelo_Usuario{
         mysqli_free_result($consulta);
         mysqli_close($con);
     }
-    
+    function lastInsert(){
+        
+        
+    }
     function listarRol(){
         $sql = "CALL ST_LISTAR_ROL();";
         $arreglo = array();
@@ -55,12 +64,26 @@ class Modelo_Usuario{
             return 'algo ha ido mal...';
         }
     }
+    function listarTipoUsu(){
+        $sql = "CALL ST_LISTAR_TIPO_USU();";
+        $arreglo = array();
+        $consulta= $this->conexion->consulta($sql);
+        if(!$consulta){
+            while($consulta_VU = $this->conexion->extraer_registro()){
+                $arreglo[]=$consulta_VU;
+            }
+            return $arreglo;
+            $this->conexion->cerrar();
+        }else{
+            return 'algo ha ido mal...';
+        }
+    }
 
-    function registrarUsuario($usuario, $nombre, $apellidos, $fnac, $contra, $email, $rol, $sexo){
+    function registrarUsuario($usuario, $nombre, $apellidos, $fnac, $contra, $email, $rol, $sexo, $tipousu){
         $contrasena = $this->conexion->encrypt_decrypt('encrypt', $contra);
         
-        $sql = "INSERT INTO usuarios(nombre_usuario, nombre, apellidos, fecha_nacimiento, contrasena, correo, estado, rol_id, sexo)
-        VALUES ('$usuario', '$nombre', '$apellidos', '$fnac', '$contrasena', '$email', 'ACTIVO', '$rol', '$sexo');";
+        $sql = "INSERT INTO usuarios(nombre_usuario, nombre, apellidos, fecha_nacimiento, contrasena, correo, estado, rol_id, sexo, tipo_id)
+        VALUES ('$usuario', '$nombre', '$apellidos', '$fnac', '$contrasena', '$email', 'ACTIVO', '$rol', '$sexo', '$tipousu');";
         $consulta = $this->conexion->consulta($sql);
         if(!$consulta){
             echo 1;
@@ -120,6 +143,7 @@ class Modelo_Usuario{
             return 0;
         }
     }
+    /*
     function restablecerContrasena($email, $contra){
         $contraencrypt = $this->conexion->encrypt_decrypt('encrypt', $contra);
         $sqlcount = "SELECT COUNT(*) FROM usuarios WHERE correo = '$email'";
@@ -136,4 +160,5 @@ class Modelo_Usuario{
             return 0;
         }
     }
+    */
 }

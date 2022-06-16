@@ -7,7 +7,7 @@ if(isset($_POST['name']) && isset($_POST['description']) && isset($_POST['idusua
     $name = $_POST['name'];
     $description = $_POST['description'];
     $idusuario = $_POST['idusuario'];
-    $query = "INSERT INTO taskapp(name, description, estado, idusuario) VALUES ('$name', '$description', 'SIN EMPEZAR', '$idusuario')";
+    $query = "INSERT INTO taskapp(name, description, estado, puntosclave, idusuario) VALUES ('$name', '$description', 'SIN EMPEZAR', '', '$idusuario')";
     $result = $con->consulta($query);
     
 

@@ -4,62 +4,59 @@ class HomeModel extends Query{
     {
         parent::__construct();
     }
-    public function registrar($evento, $descripcion, $fechainicio, $fechafin, $color, $idusuario){
-        $sql = "INSERT INTO calendario (title, descripcion, start, end, color) VALUES (?, ?, ?, ?, ?) WHERE calendario.idusuario=?";
-        $array = array($evento, $descripcion, $fechainicio, $fechafin, $color, $idusuario);
+    public function registrar($title, $inicio, $color, $idusuario)
+    {
+        $sql = "INSERT INTO calendario (title, start, color, idusuario) VALUES (?,?,?,?)";
+        $array = array($title, $inicio, $color, $idusuario);
         $data = $this->save($sql, $array);
-        if($data == 1){
-            $msg = 1;
+        if ($data == 1) {
+            $res = 'ok';
         }else{
-            $msg = 0;
+            $res = 'error';
         }
-        return $msg;
-
+        return $res;
     }
-    public function listarEventos($idusuario){
+    public function getEventos($idusuario)
+    {
         $sql = "SELECT * FROM calendario WHERE idusuario=?";
-        $array = array($idusuario);
-        return $this->save($sql, $array);
-        
-
+        return $this->selectAll($sql);
     }
-    public function eliminar($id, $idusuario){
-        $sql = "DELETE FROM calendario WHERE `calendario`.`idevento` =? AND `calendario`.`idusuario` =?";
-        $array = array($id, $idusuario);
+    public function modificar($title, $inicio, $color, $id, $idusuario)
+    {
+        $sql = "UPDATE calendario SET title=?, start=?, color=? WHERE idevento=? AND idusuario=?";
+        $array = array($title, $inicio, $color, $id, $idusuario);
         $data = $this->save($sql, $array);
-        if($data == 1){
-            $msg = 1;
-        }else{
-            $msg = 0;
+        if ($data == 1) {
+            $res = 'ok';
+        } else {
+            $res = 'error';
         }
-        return $msg;
-        
-
+        return $res;
     }
-    public function modificar($evento, $descripcion, $fechainicio, $fechafin, $color, $id, $idusuario){
-        $sql = "UPDATE calendario SET title=?, descripcion=?, start=?, end=?, color=? WHERE idevento=? AND calendario.idusuario INNER JOIN usuarios.idusuario=?";
-        $array = array($evento, $descripcion, $fechainicio, $fechafin, $color, $id, $idusuario);
+    public function eliminar($id)
+    {
+        $sql = "DELETE FROM calendario WHERE idevento=?";
+        $array = array($id);
         $data = $this->save($sql, $array);
-        if($data == 1){
-            $msg = 1;
-        }else{
-            $msg = 0;
+        if ($data == 1) {
+            $res = 'ok';
+        } else {
+            $res = 'error';
         }
-        return $msg;
-
+        return $res;
     }
-    public function drop($fechainicio, $fechafin, $id, $idusuario){
-        $sql = "UPDATE calendario SET start=?, end=? WHERE idevento=? AND idusuario=?";
-        $array = array($fechainicio, $fechafin, $id, $idusuario);
+    public function dragOver($start, $id)
+    {
+        $sql = "UPDATE calendario SET start=? WHERE idevento=?";
+        $array = array($start, $id);
         $data = $this->save($sql, $array);
-        if($data == 1){
-            $msg = 1;
-        }else{
-            $msg = 0;
+        if ($data == 1) {
+            $res = 'ok';
+        } else {
+            $res = 'error';
         }
-        return $msg;
-
+        return $res;
     }
 }
-
+ 
 ?>

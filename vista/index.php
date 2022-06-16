@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['S_IDUSUARIO']) || !isset($_SESSION['S_ROL'])) {
+if (!isset($_SESSION['S_IDUSUARIO']) || !isset($_SESSION['S_ROL']) || $_SESSION['S_ESTADO'] == 'INACTIVO') {
     header('Location: ../login/index.php');
 }
 if(isset($_SESSION['S_ROL'])){
@@ -8,6 +8,7 @@ if(isset($_SESSION['S_ROL'])){
         header('Location: ../inicio/index.php?username='. $_SESSION['S_IDUSUARIO']);
     }
 }
+
 
 ?>
 
@@ -76,28 +77,7 @@ if(isset($_SESSION['S_ROL'])){
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <!-- Navbar Search -->
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                        <i class="fas fa-search"></i>
-                    </a>
-                    <div class="navbar-search-block">
-                        <form class="form-inline">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-navbar" type="submit">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </li>
-
+               
                 <!-- User dropdown -->
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -208,7 +188,7 @@ if(isset($_SESSION['S_ROL'])){
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a onclick="cargar_contenido('contenido_principal', 'profesores/vista_profesores_listar.php')" class="nav-link active admin">
+                                    <a onclick="cargar_contenido('contenido_principal', 'profesor/vista_profesor_listar.php')" class="nav-link active admin">
                                         <i class="nav-icon far fa-circle text-info"></i>
                                         <p>
                                             
@@ -218,7 +198,7 @@ if(isset($_SESSION['S_ROL'])){
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a onclick="cargar_contenido('contenido_principal', 'estudiantes/vista_estudiantes_listar.php')" class="nav-link active admin">
+                                    <a onclick="cargar_contenido('contenido_principal', 'estudiante/vista_estudiante_listar.php')" class="nav-link active admin">
                                         <i class="nav-icon far fa-circle text-info"></i>
                                         <p>
                                             
@@ -242,7 +222,7 @@ if(isset($_SESSION['S_ROL'])){
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href='../inicio/taskApp/index.html?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
+                            <a href='../inicio/taskApp/index.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
                                 <i class="nav-icon far fa-image"></i>
                                 <p>
                                     Lista de tareas
@@ -259,29 +239,7 @@ if(isset($_SESSION['S_ROL'])){
                         </li>
                         
                         
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-search"></i>
-                                <p>
-                                    Search
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/search/simple.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Simple Search</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="../plantilla/pages/search/enhanced.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Enhanced</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        
                         <li class="nav-item">
                             <a onclick="cargar_contenido('contenido_principal', 'perfil/vista_perfil.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
                                 <i class="nav-icon fas fa-columns"></i>

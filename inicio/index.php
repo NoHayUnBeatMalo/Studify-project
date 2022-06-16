@@ -1,6 +1,10 @@
 <?php 
 session_start();
 $idusuario = $_GET['username'];
+if(isset($_SESSION['S_IDUSUARIO'])){
+    session_destroy();
+    header('Location: ../login/index.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

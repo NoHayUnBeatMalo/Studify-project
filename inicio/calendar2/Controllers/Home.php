@@ -1,83 +1,78 @@
 <?php
-session_start();
-if (!isset($_SESSION['S_IDUSUARIO'])) {
-    header('Location: ../login/index.php');
-}
-
-
 class Home extends Controller
 {
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
     public function index()
     {
-        $this->views->getView($this, 'index');
+        $this->views->getView($this, "index");
     }
     public function registrar()
     {
-        if (empty($_POST['title']) || empty($_POST['start']) || empty($_POST['color'])) {
-            $mensaje = array('msg' => 'Los campos evento, fecha de inicio y color son requeridos', 'estado' => false, 'tipo' => 'warning');
-        } else {
-            $evento = $_POST['title'];
-            $descripcion = $_POST['description'];
-            $fechaInicio = $_POST['start'];
-            $fechaFin = $_POST['end'];
-            $color = $_POST['color'];
-            $idusuario = $_POST['idusuario'];
-            echo $idusuario;
-            $id = $_POST['id'];
-            if ($id == '') {
-
-                $insertar = array($evento, $descripcion, $fechaInicio, $fechaFin, $color, $idusuario);
-                $respuesta = $this->model->registrar($insertar);
-                if ($respuesta == 1) {
-                    $msg = array('msg' => 'Evento registrado correctamente', 'estado' => true, 'tipo' => 'success');
+        if (isset($_POST)) {
+            if (empty($_POST['title']) || empty($_POST['start'])) {
+            }else{
+                $title = $_POST['title'];
+                $start = $_POST['start'];
+                $color = $_POST['color'];
+                $id = $_POST['id'];
+                $idusuario = $_POST['idusuario'];
+                if ($id == '') {
+                    $data = $this->model->registrar($title, $start, $color, $idusuario);
+                    if ($data == 'ok') {
+                        $msg = array('msg' => 'Evento Registrado', 'estado' => true, 'tipo' => 'success');
+                    }else{
+                        $msg = array('msg' => 'Error al Registrar', 'estado' => false, 'tipo' => 'danger');
+                    }
                 } else {
-                    $msg = array('msg' => 'No se ha podido registrar el evento', 'estado' => false, 'tipo' => 'error');
+                    $data = $this->model->modificar($title, $start, $color, $id, $idusuario);
+                    if ($data == 'ok') {
+                        $msg = array('msg' => 'Evento Modificado', 'estado' => true, 'tipo' => 'success');
+                    } else {
+                        $msg = array('msg' => 'Error al Modificar', 'estado' => false, 'tipo' => 'danger');
+                    }
                 }
-            } else {
-                $insertar = array($evento, $descripcion, $fechaInicio, $fechaFin, $color, $id, $idusuario);
-                $respuesta = $this->model->modificar($insertar);
-                if ($respuesta == 1) {
-                    $msg = array('msg' => 'Evento modificado correctamente', 'estado' => true, 'tipo' => 'success');
-                } else {
-                    $msg = array('msg' => 'No se ha podido modificar el evento', 'estado' => false, 'tipo' => 'error');
-                }
+                
             }
             echo json_encode($msg);
-            die();
         }
+        die();
     }
     public function listar()
     {
-        $data = $this->model->listarEventos();
-        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        $data = $this->model->getEventos();
+        echo json_encode($data);
         die();
     }
     public function eliminar($id)
     {
         $data = $this->model->eliminar($id);
-        if ($data == 1) {
-            $msg = array('msg' => 'Evento eliminado correctamente', 'estado' => true, 'tipo' => 'success');
+        if ($data == 'ok') {
+            $msg = array('msg' => 'Evento Eliminado', 'estado' => true, 'tipo' => 'success');
         } else {
-            $msg = array('msg' => 'No se ha podido eliminar el evento', 'estado' => false, 'tipo' => 'error');
+            $msg = array('msg' => 'Error al Eliminar', 'estado' => false, 'tipo' => 'danger');
         }
-        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
+        echo json_encode($msg);
         die();
     }
-    public function drop()
+    public function drag()
     {
-        $fecha = $_POST['fecha'];
-        $id = $_POST['id'];
-        $data = $this->model->drop($fecha, $id);
-        if ($data == 1) {
-            $msg = array('msg' => 'Evento modificado correctamente', 'estado' => true, 'tipo' => 'success');
-        } else {
-            $msg = array('msg' => 'No se ha podido modificar el evento', 'estado' => false, 'tipo' => 'error');
+        if (isset($_POST)) {
+            if (empty($_POST['id']) || empty($_POST['start'])) {
+                $msg = array('msg' => 'Todo los campos son requeridos', 'estado' => false, 'tipo' => 'danger');
+            } else {
+                $start = $_POST['start'];
+                $id = $_POST['id'];
+                $data = $this->model->dragOver($start, $id);
+                if ($data == 'ok') {
+                    $msg = array('msg' => 'Evento Modificado', 'estado' => true, 'tipo' => 'success');
+                } else {
+                    $msg = array('msg' => 'Error al Modificar', 'estado' => false, 'tipo' => 'danger');
+                }
+            }
+            echo json_encode($msg);
         }
-        echo json_encode($msg, JSON_UNESCAPED_UNICODE);
         die();
     }
 }

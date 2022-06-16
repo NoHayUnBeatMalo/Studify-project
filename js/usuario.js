@@ -33,6 +33,7 @@ function verificarUsuario() {
                 data: {
                     idusuario: data[0]['idusuario'],
                     user: data[0]['nombre_usuario'],
+                    estado: data[0]['estado'],
                     rol: data[0]['rol_id']
                 }
             }).done(function (res) {
@@ -148,6 +149,72 @@ var listar_usuario = function () {
     });
 }
 
+
+function abrirModalRegistroProfesor() {
+    $('#modal_registro_profesor').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#modal_registro_profesor').modal('show');
+}
+
+function registrar_profesor() {
+    var idusu = $("#txt_idusu_p").val();
+    console.log(idusu)
+    var nombre = $("#txt_nombre_p").val();
+    var poblacion = $("#txt_poblacion_p").val();
+    var provincia = $("#txt_provincia_p").val();
+    var codpostal = $("#txt_codpostal_p").val();
+    var tel = $("#txt_tel_p").val();
+    var tipoid = 2;
+    if (idusu.length == 0 || nombre.length == 0 || poblacion.length == 0 || provincia.length == 0 || codpostal.length == 0 || tel.length == 0) {
+        Swal.fire("Mensaje de advertencia ", "Todos los campos deben tener datos", "warning")
+    }
+
+    $.ajax({
+        url: '../controlador/profesores/controlador_registrar_profesor.php',
+        type: 'POST',
+        data: {
+            idusu,
+            nombre,
+            poblacion,
+            provincia,
+            codpostal,
+            tel
+        }
+    }).done(function (resp) {
+        console.log('id:' + idusu)
+        console.log('tipo:' + tipoid)
+        console.log('res:' + resp)
+        if (resp != '1') {
+            Swal.fire("Mensaje de advertencia ", "No se ha podido introducir este profesor en la base de datos", "warning")
+        } else {
+            listar_profesor();
+            $('#modal_registro').modal('hide');
+            $.ajax({
+                url: '../controlador/usuario/controlador_cambiar_tipo.php',
+                type: 'POST',
+                data: {
+                    idusu,
+                    tipoid
+                }
+            }).done(function (res) {
+                console.log(res)
+
+            })
+
+        }
+    })
+}
+function limpiar_registro_profesor() {
+    $('#txt_idusu_p').val("");
+    $('#txt_nombre_p').val("");
+    $('#txt_poblacion_p').val("");
+    $('#txt_provincia_p').val("");
+    $('#txt_codpostal_p').val("");
+    $('#txt_tel_p').val("");
+}
+
 //desactivar usuario
 $('#tabla_usuario').on('click', '.desactivar', function () {
     var data = table.row($(this).parents('tr')).data();
@@ -166,6 +233,7 @@ $('#tabla_usuario').on('click', '.desactivar', function () {
 
             if (result.value) {
                 modificar_estatus(data.idusuario, 'INACTIVO');
+                listar_usuario()
             }
         })
     }
@@ -281,13 +349,13 @@ function listar_rol() {
         if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
                 console.log('data: ' + data[i]['rol_id'])
-                cadena += "<option value='" + data[i]['rol_id'] + "'>" + data[i]['rol_nombre'] + "</option>";
+                cadena += "<option name='opt-select-rol' value='" + data[i]['rol_id'] + "'>" + data[i]['rol_nombre'] + "</option>";
             }
             $("#cbm_rol").html(cadena);
             $("#cbm_rol_editar").html(cadena)
             console.log($("#cbm_rol_editar").html(cadena))
         } else {
-            cadena += "<option value=''>NO SE ENCONTRARON REGISTROS</option>";
+            cadena += "<option name='opt-select-rol' value=''>NO SE ENCONTRARON REGISTROS</option>";
 
             $("#cbm_rol").html(cadena);
             $("#cbm_rol_editar").html(cadena);
@@ -295,6 +363,50 @@ function listar_rol() {
         }
     })
 }
+
+function listar_tipousu() {
+    $.ajax({
+        "url": "../controlador/usuario/controlador_listar_tipo_usu.php",
+        type: 'POST'
+    }).done(function (res) {
+        console.log('res: ' + res)
+        var data = JSON.parse(res);
+        var cadena = '';
+        console.log(data)
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+                console.log('data: ' + data[i]['idtipo'])
+                cadena += "<option name='opt-select-tipousu' value='" + data[i]['idtipo'] + "'>" + data[i]['nombre_tipo'] + "</option>";
+            }
+            $("#cbm_tipousu").html(cadena);
+            $("#cbm_tipousu_editar").html(cadena)
+            console.log($("#cbm_tipousu").html(cadena))
+        } else {
+            cadena += "<option name='opt-select-tipousu' value=''>NO SE ENCONTRARON REGISTROS</option>";
+
+            $("#cbm_tipousu").html(cadena);
+            $("#cbm_tipousu_editar").html(cadena);
+
+        }
+    })
+}
+
+
+function ShowSelected(element) {
+    /* Para obtener el valor */
+    var cod = document.getElementById(element).value;
+    return cod;
+}
+$(document).on('change', '#cbm_rol', function () {
+    if (ShowSelected('cbm_rol') == 1) {
+        $('#cbm_tipousu').addClass('d-none');
+        console.log('1')
+    } else {
+
+        $('#cbm_tipousu').removeClass('d-none');
+        console.log('2')
+    }
+})
 
 function registrar_usuario() {
     var usu = $('#txt_usu').val();
@@ -304,7 +416,9 @@ function registrar_usuario() {
     var correo = $('#txt_correo').val();
     var con1 = $('#txt_con1').val();
     var con2 = $('#txt_con2').val();
-    var sexo = document.getElementById('cbm_sexo').value;
+    var sexo = $('#txt_sexo').val();
+    var rol = document.getElementById('cbm_rol').value;
+    var tipousu = document.getElementById('cbm_tipousu').value;
     console.log(usu)
     console.log(nombre)
     console.log(apellidos)
@@ -313,7 +427,9 @@ function registrar_usuario() {
     console.log(con1)
     console.log(con2)
     console.log(sexo)
-    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || con1.length == 0 || con2.length == 0 || sexo.length == 0) {
+    console.log(rol)
+    console.log(tipousu)
+    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || con1.length == 0 || con2.length == 0 || sexo.length == 0 || rol.length == 0) {
         return Swal.fire({
             icon: 'error',
             title: 'Mensaje de advertencia',
@@ -340,7 +456,8 @@ function registrar_usuario() {
             contrasena: con1,
             email: correo,
             rol: rol,
-            sexo: sexo
+            sexo: sexo,
+            tipousu: tipousu
         }
     }).done(function (resp) {
         console.log(resp)
@@ -353,8 +470,10 @@ function registrar_usuario() {
                         'success'
                     )
                     .then((value) => {
+                        
                         limpiar_registro();
                         table.ajax.reload();
+                        abrirModalRegistroProfesor();
                     })
             } else {
                 return Swal.fire('Mensaje de advertencia', 'Lo sentimos, el nombre de usuario ya se encuentra en nuestra base de datos',
@@ -381,7 +500,7 @@ function modificar_usuario() {
     var fecha_nacimiento = $('#txt_fnac_editar').val();
     var correo = $('#txt_correo_editar').val();
     var rol = document.getElementById('cbm_rol_editar').value;
-    var sexo = document.getElementById('cbm_sexo_editar').value;
+    var sexo = $('#txt_sexo_editar').val();
     console.log(usu)
     console.log(nombre)
     console.log(apellidos)
@@ -446,6 +565,7 @@ function limpiar_registro() {
 }
 
 
+
 function traer_datos_usuario() {
     var usuario = $('#usuarioprincipal').val()
     console.log(usuario)
@@ -485,18 +605,18 @@ function abrir_modal_editar_contrasena() {
     });
 }
 
-function editar_contrasena(){
+function editar_contrasena() {
     var idusuario = $('#txtidprincipal').val();
     var contrabd = $('#txtcontra_bd').val();
     var contraActual = $('#txt_contra_actual_editar').val();
     var contraNueva = $('#txt_contra_nueva_editar').val();
     var contraNuevaRepetir = $('#txt_contra_repetir_editar').val();
-    if(idusuario.length == 0 || contrabd.length == 0 || contraActual.length == 0 || contraNueva.length == 0 || contraNuevaRepetir.length == 0){
+    if (idusuario.length == 0 || contrabd.length == 0 || contraActual.length == 0 || contraNueva.length == 0 || contraNuevaRepetir.length == 0) {
         return Swal.fire(
             'Mensaje de advertencia', 'Todos los datos son requeridos', 'warning'
         )
     }
-    if(contraNueva != contraNuevaRepetir){
+    if (contraNueva != contraNuevaRepetir) {
         return Swal.fire(
             'Mensaje de advertencia', 'Debes ingresar la misma clave dos veces', 'warning'
         )
@@ -504,47 +624,47 @@ function editar_contrasena(){
     $.ajax({
         'url': '../controlador/usuario/controlador_editar_contra.php',
         type: 'POST',
-        data:{
+        data: {
             idusuario: idusuario,
             contrabd: contrabd,
             contraActual: contraActual,
             contraNueva: contraNueva,
         }
-    }).done(function(resp){
+    }).done(function (resp) {
         console.log(resp)
-        if(resp == 0){
+        if (resp == 0) {
             Swal.fire(
                 'Mensaje de advertencia', 'La contrase&ntilde;a actual que has introducido no coincide con la de la base de datos.', 'warning'
-        )
-        }else if(resp == 1){
-            
-        $('#modal_editar_contra').modal('hide');
-        
-        limpiar_editar_contrasena(); 
+            )
+        } else if (resp == 1) {
+
+            $('#modal_editar_contra').modal('hide');
+
+            limpiar_editar_contrasena();
             Swal.fire(
                 'Mensaje de confirmación',
                 'La contrase&ntilde;a ha sido actualizada',
                 'success').then((value) => {
-                    traer_datos_usuario();
-                })
-        }else{
+                traer_datos_usuario();
+            })
+        } else {
             Swal.fire(
                 'Mensaje de advertencia', 'No se ha podido introducir en la base de datos', 'warning'
-        )
+            )
         }
     })
 }
 
-function limpiar_editar_contrasena(){
-    var idusuario = $('#txtidprincipal').val("");
-    var contrabd = $('#txtcontra_bd').val("");
-    var contraActual = $('#txt_contra_actual_editar').val("");
-    var contraNueva = $('#txt_contra_nueva_editar').val("");
-    var contraNuevaRepetir = $('#txt_contra_repetir_editar').val("");
+function limpiar_editar_contrasena() {
+    $('#txtidprincipal').val("");
+    $('#txtcontra_bd').val("");
+    $('#txt_contra_actual_editar').val("");
+    $('#txt_contra_nueva_editar').val("");
+    $('#txt_contra_repetir_editar').val("");
 }
 
 
-function abrir_modal_restablecer(){
+function abrir_modal_restablecer() {
     $('#modal_restablecer_contra').modal({
         backdrop: 'static',
         keyboard: false
@@ -555,15 +675,15 @@ function abrir_modal_restablecer(){
     });
 }
 
-function restablecer_contrasena(){
+function restablecer_contrasena() {
     var email = $('#txt_email_restablecer_contra').val();
     var caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     var contrasena = "";
-    if(email.length == 0){
+    if (email.length == 0) {
         return Swal.fire('Mensaje de advertencia', 'Tiene que introducir un email', 'warning')
     }
-    for(var i = 0; i<8; i++){
-        contrasena+= caracteres.charAt(Math.floor(Math.random()*caracteres.length))
+    for (var i = 0; i < 8; i++) {
+        contrasena += caracteres.charAt(Math.floor(Math.random() * caracteres.length))
     }
     console.log(contrasena)
     $.ajax({
@@ -573,7 +693,7 @@ function restablecer_contrasena(){
             email: email,
             contrasena: contrasena
         }
-    }).done(function(resp){
+    }).done(function (resp) {
         console.log(resp)
     })
 }

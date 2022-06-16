@@ -1,72 +1,79 @@
-function listar_curso() {
-    var tableCurso = $('#tabla_cursos').DataTable({
-        'ordering': false,
-        'orderCellsTop': true,
-        'fixedHeader': true,
-        'paging': false,
-        'responsive': true,
-        'searching': {
-            'regex': true
-        },
-        'lengthMenu': [
-            [10, 25, 50, 100, -1],
-            [10, 25, 50, 100, 'All']
-        ],
+var listar_curso = function () {
+
+    $.ajax({
+        url: "../controlador/cursos/controlador_listar_cursos.php",
+        type: 'POST',
+    }).done(function (res) {
+        const dataNS = JSON.parse(res);
 
 
-        'pageLength': 10,
+        console.log(dataNS["data"])
 
-        'destroy': true,
+        table = $('#tabla_cursos').DataTable({
+            'serverSide': false,
+            'ordering': false,
+            'orderCellsTop': true,
+            'fixedHeader': true,
+            'paging': false,
+            'responsive': true,
+            'searching': {
+                'regex': true
+            },
+            'lengthMenu': [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, 'All']
+            ],
 
-        'async': false,
+            'pageLength': 10,
 
-        'processing': true,
+            'destroy': true,
 
-        'ajax': {
-            url: "../controlador/cursos/controlador_listar_cursos.php",
-            type: 'POST'
-        },
-        'order': [
-            [1, "asc"]
-        ],
-        'columns': [{
-                'defaultContent': ''
-            },
-            {
-                data: 'cod_curso'
-            },
-            {
-                data: 'nombre_curso'
-            },
-            {
-                data: 'nombre'
-            },
-            {
-                data: 'horas_curso'
-            },
-            {
-                data: 'precio_curso'
-            },
-            {
-                data: 'fechapublicacion'
-            },
-            {
-                data: 'participantes'
-            },
-            {
-                data: 'estado'
-            },
+            'async': false,
 
-            {
-                'defaultContent': "<button style='font-size:13px;' type='button' class='editar btn btn-primary'><i class='fa fa-edit'></i></button>"
-            }
-        ],
+            'processing': true,
+
+            data: dataNS["data"],
+            'columns': [{
+                    data: 'cod_curso'
+                },
+                {
+                    data: 'nombre_curso'
+                },
+                {
+                    data: 'descripcion'
+                },
+                {
+                    data: 'nombre'
+                },
+                {
+                    data: 'fechacurso'
+                },
+                {
+                    data: 'precio_curso'
+                },
+                {
+                    data: 'descuento'
+                },
+                {
+                    data: 'fechapublicacion'
+                },
+                {
+                    data: 'estado'
+                },
+                
+
+                {
+                    'defaultContent': "<button style='font-size:13px;' type='button' class='editar btn btn-primary'>Editar<i class='fa fa-edit'></i></button>&nbsp;&nbsp;&nbsp;<button style='font-size:13px;' type='button' class='eliminar btn btn-danger'><i class='fa fa-trash'></i></button>"
+                }
+            ],
 
 
-        'language': idioma_espanol,
-        select: true
+            'language': idioma_espanol,
+            select: true
+        });
     });
-    document.getElementById('tabla_cursos_filter').style.display = none;
+}
+    
     $('input.global_filter').on('keyup click', function () {
         filterglobal();
     });
@@ -74,25 +81,15 @@ function listar_curso() {
         filterColumn($(this).parents('tr').attr('data-column'))
     });
 
-
-
-}
-
-function abrirModalRegistro() {
-    $('#modal_registro').modal({
-        backdrop: 'static',
-        keyboard: false
-    });
-    $('#modal_registro').modal('show');
-
-}
-
-function registrar_usuario() {
+function registrar_curso() {
     var nombrecurso = $("#txt_nombrecurso").val();
-    var nombreprofesor = $("#txt_nombreprofesor").val();
-    var horas = $("#txt_horas").val();
+    var idprofesor = $("#txt_idprofesor").val();
+    var fechacurso = $("#txt_fechacurso").val();
+    console.log(fechacurso)
     var precio = $("#txt_precio").val();
-    if (nombrecurso.length == 0 || nombreprofesor.length == 0 || horas.length == 0 || precio.length == 0) {
+    var descripcion = $("#txt_descripcion").val();
+    var descuento = $("#txt_descuento").val();
+    if (nombrecurso.length == 0 || fechacurso.length == 0 || descripcion.length == 0 || descuento.length == 0 ||  idprofesor.length == 0 || precio.length == 0) {
         Swal.fire("Mensaje de advertencia ", "Todos los campos deben tener datos", "warning")
     }
 
@@ -101,13 +98,15 @@ function registrar_usuario() {
         type: 'POST',
         data: {
             nombrecurso,
-            nombreprofesor,
-            horas,
-            precio
+            idprofesor,
+            fechacurso,
+            precio,
+            descripcion,
+            descuento
         }
     }).done(function (resp) {
         $('#modal_registro').modal('hide');
-        console.log('res:')
+        console.log('res:' + resp)
         if (resp == '0') {
             Swal.fire("Mensaje de advertencia ", "No hay un profesor registrado con este nombre", "warning")
         }else if(resp == '2'){
@@ -120,6 +119,14 @@ function registrar_usuario() {
     })
 }
 
+function abrirModalRegistro() {
+    $('#modal_registro').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#modal_registro').modal('show');
+}
+
 function abrirModalEditar() {
     $('#modal_editar').modal({
         backdrop: 'static',
@@ -127,23 +134,40 @@ function abrirModalEditar() {
     });
     $('#modal_editar').modal('show');
 }
+$('#tabla_cursos').on('click', '.editar', function () {
+    var data = table.row($(this).parents('tr')).data();
+    console.log(data)
+    abrirModalEditar();
+    $("#txt_idcurso_editar").val(data.cod_curso)
+    $("#txt_nombrecurso_editar").val(data.nombre_curso)
+    $("#txt_idprofesor_editar").val(data.id_profesor)
+    $("#txt_fechacurso_editar").val(data.fechacurso)
+    $("#txt_precio_editar").val(data.precio_curso)
+    $("#txt_descripcion_editar").val(data.descripcion)
+    $("#txt_descuento_editar").val(data.descuento)
+})
+$('#tabla_cursos').on('click', '.eliminar', function () {
+    var data = table.row($(this).parents('tr')).data();
+    console.log(data)
+    
+})
 
 function modificar_curso() {
-    var codcurso = $('#txt_usu_editar').val();
-    var nombrecurso = $('#txt_nombre_editar').val();
-    var horascurso = $('#txt_apellidos_editar').val();
-    var preciocurso = $('#txt_fnac_editar').val();
-    var nombreprofesorcurso = $('#txt_correo_editar').val();
-    var participantescurso = document.getElementById('cbm_rol_editar').value;
-    var sexo = document.getElementById('cbm_sexo_editar').value;
-    console.log(usu)
-    console.log(nombre)
-    console.log(apellidos)
-    console.log(fecha_nacimiento)
-    console.log(correo)
-    console.log(rol)
-    console.log(sexo)
-    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || rol.length == 0 || sexo.length == 0) {
+    var codcurso = $('#txt_idcurso_editar').val();
+    var nombrecurso = $('#txt_nombrecurso_editar').val();
+    var idprofesor = $('#txt_idprofesor_editar').val();
+    var fechacurso = $('#txt_fechacurso_editar').val();
+    var precio = $('#txt_precio_editar').val();
+    var descripcion = $('#txt_descripcion_editar').val();
+    var descuento = $('#txt_descuento_editar').val();
+    console.log(codcurso)
+    console.log(nombrecurso)
+    console.log(idprofesor)
+    console.log(fechacurso)
+    console.log(precio)
+    console.log(descripcion)
+    console.log(descuento)
+    if (codcurso.length == 0 || nombrecurso.length == 0 || idprofesor.length == 0 || fechacurso.length == 0 || precio.length == 0 || descripcion.length == 0 || descuento.length == 0) {
         return Swal.fire({
             icon: 'error',
             title: 'Mensaje de advertencia',
@@ -155,14 +179,17 @@ function modificar_curso() {
         "url": "../controlador/cursos/controlador_modificar_curso.php",
         type: 'POST',
         data: {
-            codcurso: codcurso,
-            nombre: nombrecurso,
-            horas: horascurso,
-            precio: preciocurso,
-            nombreprofesor: nombreprofesorcurso,
-            participantes: participantescurso
+            codcurso, 
+            nombrecurso,
+            idprofesor, 
+            fechacurso,
+            precio, 
+            descripcion,
+            descuento
         }
     }).done(function (resp) {
+        
+        listar_curso();
         console.log(resp)
         if (resp > 0) {
             $('#modal_editar').modal('hide');
@@ -173,7 +200,6 @@ function modificar_curso() {
             ).then(value => {
 
                 table.ajax(reload);
-                traer_datos_usuario();
             })
         } else {
             return Swal.fire({
