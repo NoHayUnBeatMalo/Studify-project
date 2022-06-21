@@ -1,7 +1,7 @@
 
 
 
-DESARROLLO DE UN SITIO WEB PARA AYUDAR A ESTUDIANTES
+**DESARROLLO DE UN SITIO WEB PARA AYUDAR A ESTUDIANTES**
 
 
 
@@ -9,7 +9,7 @@ DESARROLLO DE UN SITIO WEB PARA AYUDAR A ESTUDIANTES
 
 
 
-Proyecto final de segundo año de Desarrollo de Aplicaciones Web usando PHP, MySQL, JavaScript, HTML, CSS, frameworks y librerías de PHP y JavaScript
+**Proyecto final de segundo año de Desarrollo de Aplicaciones Web usando PHP, MySQL, JavaScript, HTML, CSS, frameworks y librerías de PHP y JavaScript**
 
 
 
@@ -17,20 +17,7 @@ Proyecto final de segundo año de Desarrollo de Aplicaciones Web usando PHP, MyS
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-TRABAJO REALIZADO POR AITOR VÁZQUEZ GARCÍA
+**TRABAJO REALIZADO POR AITOR VÁZQUEZ GARCÍA**
 
 
 
