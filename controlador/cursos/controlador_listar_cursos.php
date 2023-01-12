@@ -5,7 +5,7 @@ require '../../modelo/modelo_cursos.php';
 
 $MC = new Modelo_Cursos();
 $consulta = $MC->listarCursos();
-
+//echo '<script>alert("esta es la consulta: '.json_encode($consulta).'");</script>';
 if($consulta){
     
     echo json_encode($consulta);

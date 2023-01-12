@@ -12,4 +12,3 @@ $tel = htmlspecialchars($_POST['tel'], ENT_QUOTES, 'UTF-8');
 $consulta = $MP->registrarProfesor($idusu, $nombre, $poblacion, $provincia, $codpostal, $tel);
 
 
-echo $consulta;

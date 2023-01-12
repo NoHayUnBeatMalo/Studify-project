@@ -11,9 +11,9 @@ $tel = htmlspecialchars($_POST['tel'], ENT_QUOTES, 'UTF-8');
 
 
 $consulta = $ME->modificarDatosEstudiante($idestudiante, $poblacion, $provincia, $codpostal, $tel);
-
-echo $consulta;
-
-
-
-?>
+if(!$consulta){
+    return 'No se puede enviar la respuesta';
+}else{
+    
+    return $consulta;
+}

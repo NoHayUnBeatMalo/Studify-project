@@ -1,13 +1,16 @@
 <?php
 session_start();
-if (!isset($_SESSION['S_IDUSUARIO']) || !isset($_SESSION['S_ROL']) || $_SESSION['S_ESTADO'] == 'INACTIVO') {
-    header('Location: ../login/index.php');
+
+if (!isset($_SESSION['S_IDUSUARIO']) || !isset($_SESSION['S_ROL'])) {
+    header('Location: http://localhost/Studify-project/login/index.php');
+    
 }
-if(isset($_SESSION['S_ROL'])){
-    if($_SESSION['S_ROL'] == '2'){
-        header('Location: ../inicio/index.php?username='. $_SESSION['S_IDUSUARIO']);
-    }
+if ($_SESSION['S_ROL'] == '2') {
+    header('Location: http://localhost/Studify-project/inicio/index.php?username='.$_SESSION['S_IDUSUARIO']);
 }
+
+    
+
 
 
 ?>
@@ -22,7 +25,7 @@ if(isset($_SESSION['S_ROL'])){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>Studify || ADMIN</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -55,6 +58,9 @@ if(isset($_SESSION['S_ROL'])){
     .swal2-popup {
         font-size: 16rem;
     }
+    #tabla_usuario{
+        border-collapse: separate;
+    }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -77,7 +83,7 @@ if(isset($_SESSION['S_ROL'])){
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-               
+
                 <!-- User dropdown -->
                 <li class="nav-item dropdown user-menu">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -122,8 +128,8 @@ if(isset($_SESSION['S_ROL'])){
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="../plantila/index3.html" class="brand-link">
-                <img src="../plantilla/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <a href="../inicio/index.php?username=<?php echo $_SESSION['S_IDUSUARIO']; ?>" class="brand-link">
+                <img src="../plantilla/docs/assets/img/StudifyLogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Studify</span>
             </a>
 
@@ -157,10 +163,10 @@ if(isset($_SESSION['S_ROL'])){
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-               <li class="nav-header">PANEL DE ADMINISTRADOR</li>
+                        <li class="nav-header">PANEL DE ADMINISTRADOR</li>
                         <li class="nav-item">
                             <a href="#" class="nav-link active admin">
-                            <i class="fas fa-circle nav-icon"></i>
+                                <i class="fas fa-circle nav-icon"></i>
                                 <p>
                                     Administrador
                                     <i class="fas fa-angle-left right"></i>
@@ -171,9 +177,9 @@ if(isset($_SESSION['S_ROL'])){
                                     <a onclick="cargar_contenido('contenido_principal', 'usuario/vista_usuario_listar.php')" class="nav-link active admin">
                                         <i class="nav-icon far fa-circle text-info"></i>
                                         <p>
-                                            
+
                                             Usuario
-                                            
+
                                         </p>
                                     </a>
                                 </li>
@@ -181,9 +187,9 @@ if(isset($_SESSION['S_ROL'])){
                                     <a onclick="cargar_contenido('contenido_principal', 'curso/vista_curso_listar.php')" class="nav-link active admin">
                                         <i class="nav-icon far fa-circle text-info"></i>
                                         <p>
-                                            
+
                                             Cursos
-                                            
+
                                         </p>
                                     </a>
                                 </li>
@@ -191,9 +197,9 @@ if(isset($_SESSION['S_ROL'])){
                                     <a onclick="cargar_contenido('contenido_principal', 'profesor/vista_profesor_listar.php')" class="nav-link active admin">
                                         <i class="nav-icon far fa-circle text-info"></i>
                                         <p>
-                                            
+
                                             Profesores
-                                            
+
                                         </p>
                                     </a>
                                 </li>
@@ -201,28 +207,41 @@ if(isset($_SESSION['S_ROL'])){
                                     <a onclick="cargar_contenido('contenido_principal', 'estudiante/vista_estudiante_listar.php')" class="nav-link active admin">
                                         <i class="nav-icon far fa-circle text-info"></i>
                                         <p>
-                                            
+
                                             Estudiantes
-                                            
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="cargar_contenido('contenido_principal', 'ventas/vista_ventas_listar.php')" class="nav-link active admin">
+                                        <i class="nav-icon far fa-circle text-info"></i>
+                                        <p>
+
+                                            Ventas
+
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="cargar_contenido('contenido_principal', 'ventas/vista_ventas_detalles_listar.php')" class="nav-link active admin">
+                                        <i class="nav-icon far fa-circle text-info"></i>
+                                        <p>
+
+                                            Detalle de ventas
+
                                         </p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        
-                        
+
+
 
                         <li class="nav-header">----------------------------------------------</li>
+                        
                         <li class="nav-item">
-                            <a href="../inicio/calendar2/index.php?idu=<?php echo $_SESSION['S_IDUSUARIO'] ?>" class="nav-link">
-                                <i class="nav-icon far fa-calendar-alt"></i>
-                                <p>
-                                    Calendario
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href='../inicio/taskApp/index.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
+                            <a href='../inicio/taskApp/index.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>' );" class="nav-link">
                                 <i class="nav-icon far fa-image"></i>
                                 <p>
                                     Lista de tareas
@@ -230,16 +249,16 @@ if(isset($_SESSION['S_ROL'])){
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href='../inicio/cursos/cursos.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
+                            <a href='../inicio/cursos/cursos.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>' );" class="nav-link">
                                 <i class="nav-icon fas fa-columns"></i>
                                 <p>
                                     Cursos Studify
                                 </p>
                             </a>
                         </li>
-                        
-                        
-                        
+
+
+
                         <li class="nav-item">
                             <a onclick="cargar_contenido('contenido_principal', 'perfil/vista_perfil.php?idu=<?php echo $_SESSION['S_IDUSUARIO']  ?>');" class="nav-link">
                                 <i class="nav-icon fas fa-columns"></i>
@@ -248,7 +267,7 @@ if(isset($_SESSION['S_ROL'])){
                                 </p>
                             </a>
                         </li>
-                        
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -264,9 +283,11 @@ if(isset($_SESSION['S_ROL'])){
 
             <!-- Main content -->
             <section class="content">
-                <input type="text" id="txtidprincipal" value="<?php echo $_SESSION['S_IDUSUARIO'] ?>" hidden>
-                <input type="text" id="usuarioprincipal" value="<?php echo $_SESSION['S_USER'] ?>">
-
+                <input type="text" hidden id="txtidprincipal" value="<?php echo $_SESSION['S_IDUSUARIO'] ?>">
+                <input type="text" hidden id="usuarioprincipal" value="<?php echo $_SESSION['S_USER'] ?>">
+                <input type="text" hidden id="txttipoid" value="<?php echo $_SESSION['S_IDTIPO'] ?>">
+                <input type="text" hidden id="txtrol" value="<?php echo $_SESSION['S_ROL'] ?>">
+                
                 <div class="row" id="contenido_principal">
                     <div class="col-md-12">
                         <div class="card card-warning shadow">
@@ -293,7 +314,7 @@ if(isset($_SESSION['S_ROL'])){
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; Studify.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Aitor Vázquez García</b>
@@ -414,7 +435,7 @@ if(isset($_SESSION['S_ROL'])){
     <script src="../plantilla/dist/js/adminlte.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../plantilla/dist/js/demo.js"></script>
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <!-- AdminLTE dashboard demo (This is y for demo purposes) -->
     <!-- <script src="../plantilla/dist/js/pages/dashboard.js"></script>-->
 
     <script src="../plantilla/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -425,8 +446,11 @@ if(isset($_SESSION['S_ROL'])){
 
     <script src="../js/usuario.js"></script>
     <script>
-        traer_datos_usuario();
-        get_tipo_usuario(usuarioprincipal);
+        $(document).ready(function() {
+            
+            traer_datos_usuario();
+        });
+        
     </script>
 </body>
 

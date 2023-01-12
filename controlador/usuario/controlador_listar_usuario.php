@@ -5,6 +5,7 @@ require '../../modelo/modelo_usuario.php';
 
 $MU = new Modelo_Usuario();
 $consulta = $MU->listarUsuario();
+//echo '<script>alert("esta es la consulta: '.json_encode($consulta).'");</script>';
 
 if($consulta){
     

@@ -148,10 +148,10 @@
                 <div class="row">
                     <div class="modal-body col-lg-4">
                         <div class="col-lg-12">
-                            <input type="text" id="txtidprofesor" >
-                            <input type="text" id="txtidusu" >
+                            <input type="text" id="txtidprofesor" hidden>
+                            <input type="text" id="txtidusu" hidden>
                             <label for="txt_nombre_editar">Nombre</label>
-                            <input type="text" class="form-control col-lg-24" id="txt_nombre_editar" placeholder="Ingrese usuario" disabled><br>
+                            <input type="text" class="form-control col-lg-24" id="txt_nombre_editar" placeholder="Ingrese usuario"><br>
                         </div>
                     </div>
                     <div class="modal-body col-lg-4">

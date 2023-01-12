@@ -1,11 +1,28 @@
 <?php
 
-include_once '../../modelo/modelo_conexion.php';
+
+include_once '../../conexion.php';
+$idusuario = $_GET['idusuario'];
+$sql = "SELECT * FROM taskapp WHERE idusuario = '$idusuario'";
+$selectList = $pdo->prepare($sql);
+
+$selectList->execute();
+$json = array();
+
+$result = $selectList->fetchAll(PDO::FETCH_ASSOC);
+foreach($result as $resultado){
+    $json[] = $resultado;
+}
+
+$jsonstring = json_encode($json);
+echo $jsonstring;
+/*
+include_once '../../conexion.php';
 $con = new conexion;
 $con->conectar();
 $idusuario = '14';
 $query = "SELECT * FROM taskapp WHERE idusuario = '$idusuario'";
-$result = $con->consulta($query);
+$result = $pdo->prepare($query);
 
 $json = array();
 while($fila = $con->extraer_registro()){
@@ -19,4 +36,5 @@ while($fila = $con->extraer_registro()){
 }
 $jsonstring = json_encode($json);
 echo $jsonstring;
+*/
 ?>

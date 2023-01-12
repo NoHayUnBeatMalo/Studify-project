@@ -1,5 +1,5 @@
 <?php
-require_once '../../modelo/modelo_conexion.php';
+require_once '../../conexion.php';
 
 if(isset($_POST['idusuario']) || isset($_POST['nombreusuario']) || isset($_POST['nombre']) || isset($_POST['apellidos']) || isset($_POST['correo']) || isset($_POST['telefono']) || isset($_POST['provincia']) || isset($_POST['codigopostal'])){
     $idusuario = $_POST['idusuario'];
@@ -11,10 +11,11 @@ if(isset($_POST['idusuario']) || isset($_POST['nombreusuario']) || isset($_POST[
     $provincia = $_POST['provincia'];
     $poblacion = $_POST['poblacion'];
     $codigopostal = $_POST['codigopostal'];
-    $con = new conexion();
-    $con->conectar();
+    
     $sql = "UPDATE usuarios SET nombre_usuario = '".$nusu."', nombre ='".$nombre."', apellidos ='".$apellidos."' , correo ='".$correo."' WHERE idusuario = '".$idusuario."'; ";
-    $consulta = $con->consulta($sql);
+    $consulta = $pdo->prepare($sql);
+    $consulta->execute();
+    
     if(!$consulta){
         return 1;
     }else{

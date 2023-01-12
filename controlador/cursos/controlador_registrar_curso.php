@@ -12,7 +12,8 @@ $MC = new Modelo_Cursos();
     $precio = htmlspecialchars($_POST['precio'], ENT_QUOTES, 'UTF-8');
     $descripcion = htmlspecialchars($_POST['descripcion'], ENT_QUOTES, 'UTF-8');
     $descuento = htmlspecialchars($_POST['descuento'], ENT_QUOTES, 'UTF-8');
-    $consulta = $MC->registrarCurso($idprofesor, $nombrecurso, $descripcion, $precio, $descuento, $fechacurso);
+    $registrarCurso = $MC->registrarCurso($idprofesor, $nombrecurso, $descripcion, $precio, $descuento, $fechacurso);
+    if($registrarCurso){
+        return $registrarCurso;
+    }
 
-
-echo $consulta;

@@ -1,23 +1,22 @@
 <?php
 
-include_once '../../modelo/modelo_conexion.php';
-$con = new conexion;
+include_once '../../conexion.php';
 
-$con->conectar(); 
-if(isset($_POST['id'])){
+
+
+if(isset($_POST['id']) && isset($_POST['idusuario'])){
     $id = $_POST['id'];
-    $query = "SELECT * FROM taskapp WHERE idtarea = '$id'";
-    $con->consulta($query);
+    $idusuario = $_POST['idusuario'];
+    $sql = "SELECT idtarea, name, description, estado FROM taskapp WHERE idtarea = $id AND idusuario= $idusuario;";
     $json = array();
-    while($fila = $con->extraer_registro()){
-        $json[] = array(
-            'name' => $fila['name'],
-            'description' => $fila['description'],
-            'id' => $fila['idtarea'],
-            'estado' => $fila['estado']
-        );
+    $selectTask = $pdo->prepare($sql);
+    $selectTask->execute();
+    $resultado = $selectTask->fetchAll(PDO::FETCH_ASSOC);
+    foreach($resultado as $result){
+        $json[] = $result;
     }
-    $jsonstring = json_encode($json[0]);
+    
+    $jsonstring = json_encode($json);
     echo $jsonstring;
 }
 

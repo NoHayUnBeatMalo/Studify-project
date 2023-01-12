@@ -7,6 +7,8 @@ function validarCodigoPostal() {
         alert("codigo invalido");
     }
 }
+var table = $('#tabla_profesor').DataTable();
+
 var listar_profesor = function () {
 
     $.ajax({
@@ -15,12 +17,12 @@ var listar_profesor = function () {
     }).done(function (res) {
         const dataNS = JSON.parse(res);
 
-
+        console.log(res)
         console.log(dataNS)
 
         table = $('#tabla_profesor').DataTable({
             'serverSide': false,
-            'ordering': false,
+            'ordering': true,
             'orderCellsTop': true,
             'fixedHeader': true,
             'paging': false,
@@ -186,9 +188,8 @@ function modificar_profesor() {
             tel
         }
     }).done(function (resp) {
-        listar_profesor()
         console.log(resp)
-        if (resp > 0) {
+        if (resp == '') {
             $('#modal_editar').modal('hide');
             return Swal.fire(
                 'Mensaje de confirmación',
@@ -196,7 +197,14 @@ function modificar_profesor() {
                 'success'
             ).then(value => {
 
-                table.ajax(reload);
+                table.destroy();
+                table = $('#tabla_profesor').DataTable();
+                
+                console.log(value);
+                if (value.isConfirmed) {
+
+                    listar_profesor();
+                }
             })
         } else {
             return Swal.fire({
@@ -230,6 +238,7 @@ function traer_datos_usuario() {
         }
 
     }).done(function (resp) {
+        console.log(resp)
         var data = JSON.parse(resp)
         console.log(data)
         if (data.length > 0) {

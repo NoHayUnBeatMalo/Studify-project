@@ -1,16 +1,18 @@
 <?php
-require_once '../../modelo/modelo_conexion.php';
-$con = new conexion();
-$con->conectar();
+require_once '../../conexion.php';
 if(isset($_POST['idusuario']) || isset($_POST['sexo'])){
     $idusuario = $_POST['idusuario'];
     $sexo = $_POST['sexo'];
     if($sexo == 'MASCULINO'){
         $new = 'FEMENINO';
-        $con->consulta("UPDATE usuarios SET sexo='".$new."' WHERE idusuario='".$idusuario."';");
+        $cambiarsexo = $pdo->prepare("UPDATE usuarios SET sexo='".$new."' WHERE idusuario='".$idusuario."';");
+        $cambiarsexo->execute();
+        
     }else{
         $new = 'MASCULINO';
-        $con->consulta("UPDATE usuarios SET sexo='".$new."' WHERE idusuario='".$idusuario."';");
+        $cambiarsexo = $pdo->prepare("UPDATE usuarios SET sexo='".$new."' WHERE idusuario='".$idusuario."';");
+        $cambiarsexo->execute();
+        
     }
 }
 

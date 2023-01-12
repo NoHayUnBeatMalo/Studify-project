@@ -6582,6 +6582,7 @@
 	 *  @param {int} tn Technical note id to get more information about the error.
 	 *  @memberof DataTable#oApi
 	 */
+	/*
 	function _fnLog( settings, level, msg, tn )
 	{
 		msg = 'DataTables warning: '+
@@ -6615,7 +6616,7 @@
 			console.log( msg );
 		}
 	}
-	
+	*/
 	
 	/**
 	 * See if a property is defined on one object, if so assign it to the other object

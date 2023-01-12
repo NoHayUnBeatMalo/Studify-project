@@ -26,7 +26,7 @@
 
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
-                showValidate(input[i]);
+                showHideValidate(input[i], "show");
                 check=false;
             }
         }
@@ -37,7 +37,7 @@
 
     $('.validate-form .input100').each(function(){
         $(this).focus(function(){
-           hideValidate(this);
+            showHideValidate(this, "hide");
         });
     });
 
@@ -54,18 +54,15 @@
         }
     }
 
-    function showValidate(input) {
+    function showHideValidate(input, string) {
         var thisAlert = $(input).parent();
-
-        $(thisAlert).addClass('alert-validate');
+        if(string == "show"){
+            $(thisAlert).addClass('alert-validate');
+        }else if("hide"){
+            $(thisAlert).removeClass('alert-validate');
+        }else{
+            return null;
+        }
+        
     }
-
-    function hideValidate(input) {
-        var thisAlert = $(input).parent();
-
-        $(thisAlert).removeClass('alert-validate');
-    }
-    
-    
-
 })(jQuery);

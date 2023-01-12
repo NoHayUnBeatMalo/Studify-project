@@ -1,13 +1,14 @@
 <?php
 
-include_once '../../modelo/modelo_conexion.php';
-$con = new conexion;
+include_once '../../conexion.php';
 
-$con->conectar();
+
 if(isset($_POST['id'])){
     $id = $_POST['id'];
-    $query = "DELETE FROM taskapp WHERE idtarea = '$id'";
-    $con->consulta($query);
+    $sql = "DELETE FROM taskapp WHERE idtarea = '$id'";
+    $deleteTask = $pdo->prepare($sql);
+    $deleteTask->execute();
+    
     echo 'task deleted successfully';
 }
 

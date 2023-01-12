@@ -209,7 +209,7 @@ svg {
 }
 
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
 }
 
 caption {

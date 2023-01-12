@@ -12,9 +12,8 @@ $tel = htmlspecialchars($_POST['tel'], ENT_QUOTES, 'UTF-8');
 
 
 $consulta = $MP->modificarDatosProfesor($idprofesor, $nombre, $poblacion, $provincia, $codpostal, $tel);
-
-echo $consulta;
-
-
-
-?>
+if(!$consulta) {
+   return 'Algo salió mal';
+}else{
+   return $consulta;
+}

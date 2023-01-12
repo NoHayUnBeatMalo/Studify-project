@@ -1,6 +1,10 @@
+
 function verificarUsuario() {
     var usu = $("#txt_usu").val();
+    console.log(usu);
+
     var con = $("#txt_con").val();
+    //console.log(con)
     if (usu.length == 0 || con.length == 0) {
         return Swal.fire({
             icon: 'error',
@@ -17,54 +21,65 @@ function verificarUsuario() {
             pass: con
         }
     }).done(function (res) {
-        if (res == 0) {
-            console.log(res);
+        console.log(res);
+        if (res == false) {
+            //console.log(res);
             Swal.fire('Mensaje de error', 'Los datos que has introducido no son correctos', 'error');
         } else {
             var data = JSON.parse(res);
-            console.log('<br>' + res);
-            console.log(data)
-            if (data[0]['estado'] === 'INACTIVO') {
+            console.log('texto ');
+            console.log(data);
+            if (data['estado'] === 'INACTIVO') {
                 return Swal.fire('Mensaje de advertencia', 'Lo sentimos, el usuario ' + usu + ' se encuentra suspendido. Comuniquese con el administrados del sistema', 'warning');
-            }
-            $.ajax({
-                url: '../controlador/usuario/controlador_crear_session.php',
-                type: 'POST',
-                data: {
-                    idusuario: data[0]['idusuario'],
-                    user: data[0]['nombre_usuario'],
-                    estado: data[0]['estado'],
-                    rol: data[0]['rol_id']
-                }
-            }).done(function (res) {
-                let timerInterval
-                Swal.fire({
-                    title: '¡Bienvenido al sistema!',
-                    html: 'Será redireccionado en <b></b> milliseconds.',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading()
-                        const b = Swal.getHtmlContainer().querySelector('b')
-                        timerInterval = setInterval(() => {
-                            b.textContent = Swal.getTimerLeft()
-                        }, 100)
-                    },
-                    willClose: () => {
-                        clearInterval(timerInterval)
+            } else {
+                console.log('controlador crear session');
+                $.ajax({
+                    url: '../controlador/usuario/controlador_crear_session.php',
+                    type: 'POST',
+                    data: {
+                        idusuario: data['idusuario'],
+                        user: data['nombre_usuario'],
+                        estado: data['estado'],
+                        rol: data['rol_id'],
+                        tipo: data['tipo_id']
                     }
-                }).then((result) => {
-                    /* Read more about handling dismissals below */
-                    if (result.dismiss === Swal.DismissReason.timer) {
-                        location.reload()
-                    }
+                }).done(function () {
+
+                    let timerInterval
+                    Swal.fire({
+                        title: '¡Bienvenido al sistema!',
+                        html: 'Será redireccionado en <b></b> milliseconds.',
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading()
+                            const b = Swal.getHtmlContainer().querySelector('b')
+                            timerInterval = setInterval(() => {
+                                b.textContent = Swal.getTimerLeft()
+                            }, 100)
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval)
+                        }
+
+                    }).then((result) => {
+                        /* Read more about handling dismissals below */
+
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload()
+                        }
+                        window.location.href = "http://localhost/Studify-project/vista/index.php";
+
+
+                    })
                 })
-            })
+            }
+
 
         }
     })
 }
-var table;
+var table = $('#tabla_usuario').DataTable();
 
 
 
@@ -74,6 +89,7 @@ var listar_usuario = function () {
         url: "../controlador/usuario/controlador_listar_usuario.php",
         type: 'POST',
     }).done(function (res) {
+        console.log(res)
         const dataNS = JSON.parse(res);
 
 
@@ -81,7 +97,7 @@ var listar_usuario = function () {
 
         table = $('#tabla_usuario').DataTable({
             'serverSide': false,
-            'ordering': false,
+            'ordering': true,
             'orderCellsTop': true,
             'fixedHeader': true,
             'paging': false,
@@ -104,42 +120,42 @@ var listar_usuario = function () {
 
             data: dataNS,
             'columns': [{
-                    data: 'idusuario'
-                },
-                {
-                    data: 'nombre_usuario'
-                },
-                {
-                    data: 'nombre'
-                },
-                {
-                    data: 'apellidos'
-                },
-                {
-                    data: 'fecha_nacimiento'
-                },
-                {
-                    data: 'correo'
-                },
-                {
-                    data: 'estado',
+                data: 'idusuario'
+            },
+            {
+                data: 'nombre_usuario'
+            },
+            {
+                data: 'nombre'
+            },
+            {
+                data: 'apellidos'
+            },
+            {
+                data: 'fecha_nacimiento'
+            },
+            {
+                data: 'correo'
+            },
+            {
+                data: 'estado',
 
 
-                    render: function (data, type, row) {
-                        if (data == 'ACTIVO') {
-                            return "<span class='badge badge-success'>" + data + "</span>";
-                        } else {
-                            return "<span class='badge badge-danger'>" + data + "</span>";
-                        }
+                render: function (data, type, row) {
+                    if (data == 'ACTIVO') {
+                        return "<span class='badge badge-success'>" + data + "</span>";
+                    } else {
+                        return "<span class='badge badge-danger'>" + data + "</span>";
                     }
-                },
-
-                {
-                    data: 'rol_nombre'
-                },
-                {
-                    'defaultContent': "<button style='font-size:13px;' type='button' class='editar btn btn-primary'><i class='fa fa-edit'></i></button>&nbsp;<button style='font-size:13px;' type='button' class='activar btn btn-success'><i class='fa fa-check'></i></button>&nbsp;<button style='font-size:13px;' type='button' class='desactivar btn btn-danger'><i class='fa fa-trash'></i></button>"
                 }
+            },
+
+            {
+                data: 'rol_nombre'
+            },
+            {
+                'defaultContent': "<button style='font-size:13px;' type='button' class='editar btn btn-primary'><i class='fa fa-edit'></i></button>&nbsp;<button style='font-size:13px;' type='button' class='activar btn btn-success'><i class='fa fa-check'></i></button>&nbsp;<button style='font-size:13px;' type='button' class='desactivar btn btn-danger'><i class='fa fa-trash'></i></button>"
+            }
             ],
 
 
@@ -149,13 +165,22 @@ var listar_usuario = function () {
     });
 }
 
-
+//abrir modal registro profesor
 function abrirModalRegistroProfesor() {
     $('#modal_registro_profesor').modal({
         backdrop: 'static',
         keyboard: false
     });
     $('#modal_registro_profesor').modal('show');
+}
+
+//abrir modal registro estudiante
+function abrirModalRegistroEstudiante() {
+    $('#modal_registro_estudiante').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#modal_registro_estudiante').modal('show');
 }
 
 function registrar_profesor() {
@@ -233,6 +258,7 @@ $('#tabla_usuario').on('click', '.desactivar', function () {
 
             if (result.value) {
                 modificar_estatus(data.idusuario, 'INACTIVO');
+                table.ajax.reload();
                 listar_usuario()
             }
         })
@@ -246,18 +272,19 @@ $('#tabla_usuario').on('click', '.activar', function () {
     console.log(data.idusuario)
     if (data.idusuario > 0) {
         Swal.fire({
-            title: '¿Estás seguro de que quieres desactivar el usuario?',
-            text: "Cuando está inactivo el usuario no tendrá acceso al sistema",
-            icon: 'warning',
+            title: '¿Estás seguro de que quieres activar el usuario?',
+            text: "El usuario volverá a tener acceso al sistema",
+            icon: 'success',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, desactívalo'
+            confirmButtonText: 'Sí, actívalo'
         }).then((result) => {
 
             if (result.isConfirmed) {
                 modificar_estatus(data.idusuario, 'ACTIVO');
                 table.ajax.reload();
+                listar_usuario();
             }
         })
     }
@@ -267,7 +294,7 @@ $('#tabla_usuario').on('click', '.activar', function () {
 $('#tabla_usuario').on('click', '.editar', function () {
     var data = table.row($(this).parents('tr')).data();
     abrirModalEditar();
-    $("#txtidusuario").val(data.idusuario)
+    $("#txtidusuario").val(data.idusuario);
     $("#txt_usu_editar").val(data.nombre_usuario)
     $("#txt_nombre_editar").val(data.nombre)
     $("#txt_apellidos_editar").val(data.apellidos)
@@ -296,7 +323,7 @@ function modificar_estatus(idusuario, estatus) {
                 'success')
 
 
-            table.ajax.reload();
+            listar_usuario();
         } else {
             Swal.fire(
                 'Mensaje de advertencia',
@@ -346,14 +373,15 @@ function listar_rol() {
         console.log('res: ' + res)
         var data = JSON.parse(res);
         var cadena = '';
+        console.log('resp listar rol:::::' + res)
         if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
                 console.log('data: ' + data[i]['rol_id'])
                 cadena += "<option name='opt-select-rol' value='" + data[i]['rol_id'] + "'>" + data[i]['rol_nombre'] + "</option>";
             }
             $("#cbm_rol").html(cadena);
-            $("#cbm_rol_editar").html(cadena)
-            console.log($("#cbm_rol_editar").html(cadena))
+            $("#cbm_rol_editar").html(cadena);
+            console.log($("#cbm_rol_editar").html(cadena));
         } else {
             cadena += "<option name='opt-select-rol' value=''>NO SE ENCONTRARON REGISTROS</option>";
 
@@ -372,7 +400,7 @@ function listar_tipousu() {
         console.log('res: ' + res)
         var data = JSON.parse(res);
         var cadena = '';
-        console.log(data)
+        console.log('resp tipo usu:::::' + res)
         if (data.length > 0) {
             for (var i = 0; i < data.length; i++) {
                 console.log('data: ' + data[i]['idtipo'])
@@ -380,7 +408,7 @@ function listar_tipousu() {
             }
             $("#cbm_tipousu").html(cadena);
             $("#cbm_tipousu_editar").html(cadena)
-            console.log($("#cbm_tipousu").html(cadena))
+            console.log($("#cbm_tipousu_editar").html(cadena))
         } else {
             cadena += "<option name='opt-select-tipousu' value=''>NO SE ENCONTRARON REGISTROS</option>";
 
@@ -419,6 +447,7 @@ function registrar_usuario() {
     var sexo = $('#txt_sexo').val();
     var rol = document.getElementById('cbm_rol').value;
     var tipousu = document.getElementById('cbm_tipousu').value;
+    
     console.log(usu)
     console.log(nombre)
     console.log(apellidos)
@@ -429,6 +458,8 @@ function registrar_usuario() {
     console.log(sexo)
     console.log(rol)
     console.log(tipousu)
+    
+    console.log('tipo usu: '+tipousu)
     if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || con1.length == 0 || con2.length == 0 || sexo.length == 0 || rol.length == 0) {
         return Swal.fire({
             icon: 'error',
@@ -437,6 +468,16 @@ function registrar_usuario() {
             tipo: 'warning'
         });
     }
+    
+    if (sexo !== 'MASCULINO' && sexo !== 'FEMENINO') {
+        return Swal.fire({
+            icon: 'error',
+            title: 'Mensaje de advertencia',
+            text: 'Los valores permitidos en el campo sexo son unicamente "MASCULINO" y "FEMENINO"',
+            tipo: 'warning'
+        });
+    }
+    
     if (con1 != con2) {
         return Swal.fire({
             icon: 'error',
@@ -461,25 +502,39 @@ function registrar_usuario() {
         }
     }).done(function (resp) {
         console.log(resp)
-        if (resp > 0) {
-            if (resp == 1) {
+        //limpiar_registro();
+        if (resp == '') {
+            
                 $('#modal_registro').modal('hide');
                 return Swal.fire(
-                        'Mensaje de confirmación',
-                        'Datos correctamente introducidos en el sistema. Nuevo usuario registrado',
-                        'success'
-                    )
-                    .then((value) => {
-                        
-                        limpiar_registro();
-                        table.ajax.reload();
-                        abrirModalRegistroProfesor();
-                    })
-            } else {
-                return Swal.fire('Mensaje de advertencia', 'Lo sentimos, el nombre de usuario ya se encuentra en nuestra base de datos',
-                    'warning'
+                    'Mensaje de confirmación',
+                    'Datos correctamente introducidos en el sistema. Nuevo usuario registrado',
+                    'success'
                 )
-            }
+                    .then((value) => {
+
+                        limpiar_registro();
+                        table.destroy();
+                        
+                        table = $('#tabla_usuario').DataTable();
+                        if(rol == 2){
+                            if (tipousu == 1) {
+                                abrirModalRegistroEstudiante();
+                                
+                            } else if (tipousu == 2) {
+                                
+                                abrirModalRegistroProfesor();
+                            }
+                        }else{
+                            return Swal.fire(
+                                'Mensaje de confirmación',
+                                'Al registrarte como administrador no puedes ser ni estudiante ni profesor',
+                                'success'
+                            )
+                        }
+                        
+                    })
+            
 
         } else {
             return Swal.fire({
@@ -499,16 +554,17 @@ function modificar_usuario() {
     var apellidos = $('#txt_apellidos_editar').val();
     var fecha_nacimiento = $('#txt_fnac_editar').val();
     var correo = $('#txt_correo_editar').val();
-    var rol = document.getElementById('cbm_rol_editar').value;
+    //var tiporol = $('#cbm_rol_editar').value;
     var sexo = $('#txt_sexo_editar').val();
+    //var tipousuario = $('#cbm_tipousu_editar').value;
     console.log(usu)
     console.log(nombre)
     console.log(apellidos)
     console.log(fecha_nacimiento)
     console.log(correo)
-    console.log(rol)
+    //console.log(rol)
     console.log(sexo)
-    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || rol.length == 0 || sexo.length == 0) {
+    if (usu.length == 0 || nombre.length == 0 || apellidos.length == 0 || fecha_nacimiento.length == 0 || correo.length == 0 || sexo.length == 0) {
         return Swal.fire({
             icon: 'error',
             title: 'Mensaje de advertencia',
@@ -525,8 +581,9 @@ function modificar_usuario() {
             ape: apellidos,
             fnac: fecha_nacimiento,
             email: correo,
-            rol: rol,
+            //rol: tiporol,
             sexo: sexo
+            //tipousuario: tipousuario
         }
     }).done(function (resp) {
         console.log(resp)
@@ -537,10 +594,18 @@ function modificar_usuario() {
                 'Datos correctamente actualizados en el sistema.',
                 'success'
             ).then(value => {
+                table.destroy();
+                table = $('#tabla_usuario').DataTable();
+                
+                console.log(value);
+                if (value.isConfirmed) {
 
-                table.ajax(reload);
-                traer_datos_usuario();
-            })
+                    listar_usuario();
+                }
+
+            });
+
+
         } else {
             return Swal.fire({
                 icon: 'error',
@@ -573,14 +638,15 @@ function traer_datos_usuario() {
         url: '../controlador/usuario/controlador_traer_datos_usuario.php',
         type: 'POST',
         data: {
-            usuario: usuario
+            user: usuario
         }
 
     }).done(function (resp) {
-        var data = JSON.parse(resp)
+        console.log(resp);
+        console.log('dentro de traer datos usuario');
+        var data = JSON.parse(resp);
         console.log(data)
         if (data.length > 0) {
-            $('#txtcontra_bd').val(data[0]['contrasena']);
             if (data[0]['sexo'] == 'MASCULINO') {
                 $('#img_nav').attr('src', '../plantilla/dist/img/avatar5.png')
                 $('#img_subnav').attr('src', '../plantilla/dist/img/avatar5.png')
@@ -645,8 +711,8 @@ function editar_contrasena() {
                 'Mensaje de confirmación',
                 'La contrase&ntilde;a ha sido actualizada',
                 'success').then((value) => {
-                traer_datos_usuario();
-            })
+                    traer_datos_usuario();
+                })
         } else {
             Swal.fire(
                 'Mensaje de advertencia', 'No se ha podido introducir en la base de datos', 'warning'
@@ -655,7 +721,7 @@ function editar_contrasena() {
     })
 }
 
-function limpiar_editar_contrasena() {
+/*function limpiar_editar_contrasena() {
     $('#txtidprincipal').val("");
     $('#txtcontra_bd').val("");
     $('#txt_contra_actual_editar').val("");
@@ -697,3 +763,4 @@ function restablecer_contrasena() {
         console.log(resp)
     })
 }
+*/

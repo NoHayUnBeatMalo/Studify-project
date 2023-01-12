@@ -12,9 +12,8 @@ $descripcion = htmlspecialchars($_POST['descripcion'], ENT_QUOTES, 'UTF-8');
 $descuento = htmlspecialchars($_POST['descuento'], ENT_QUOTES, 'UTF-8');
 
 
-$consulta = $MC->modificarDatosCurso($codcurso, $nombrecurso, $idprofesor, $fechacurso, $precio, $descripcion, $descuento);
-
-echo $consulta;
+$modificar = $MC->modificarDatosCurso($codcurso, $nombrecurso, $idprofesor, $fechacurso, $precio, $descripcion, $descuento);
+return $modificar;
 
 
 

@@ -1,12 +1,12 @@
 <?php 
 
+include_once '../../conexion.php';
 require '../../modelo/modelo_usuario.php';
-require '../../modelo/modelo_estudiante.php';
-require '../../modelo/modelo_profesor.php';
+include_once '../../modelo/modelo_estudiante.php';
+include_once '../../modelo/modelo_profesor.php';
 
 $MU = new Modelo_Usuario();
-$ME = new Modelo_Estudiante();
-$MP = new Modelo_Profesor();
+
 $usuario = htmlspecialchars($_POST['usuario'], ENT_QUOTES, 'UTF-8');
 $nombre = htmlspecialchars($_POST['nom'], ENT_QUOTES, 'UTF-8');
 $apellidos = htmlspecialchars($_POST['ape'], ENT_QUOTES, 'UTF-8');
@@ -16,18 +16,10 @@ $contrasena = htmlspecialchars($_POST['contrasena'], ENT_QUOTES, 'UTF-8');
 $rol = htmlspecialchars($_POST['rol'], ENT_QUOTES, 'UTF-8');
 $sexo = htmlspecialchars($_POST['sexo'], ENT_QUOTES, 'UTF-8');
 $tipousu = htmlspecialchars($_POST['tipousu'], ENT_QUOTES, 'UTF-8');
-//admin
-if($rol == 1){
-    $tipousu = NULL;
-    $consulta = $MU->registrarUsuario($usuario, $nombre, $apellidos, $fnac, $contrasena, $email,  $rol, $sexo, $tipousu);
-    
+
+$registrar = $MU->registrarUsuario($usuario, $nombre, $apellidos, $fnac, $contrasena, $email,  $rol, $sexo, $tipousu);
+if($registrar){
+    return 1;
 }else{
-    $consulta = $MU->registrarUsuario($usuario, $nombre, $apellidos, $fnac, $contrasena, $email,  $rol, $sexo, $tipousu);
-    
+    return 0;
 }
-echo $consulta;
-
-
-
-
-?>

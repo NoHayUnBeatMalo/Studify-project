@@ -1,13 +1,15 @@
 <?php 
-
+include_once '../../conexion.php';
 require '../../modelo/modelo_usuario.php';
-
+//echo '<script>console.log("dentro del controlador traerdatosusu")</script>';
 $MU = new Modelo_Usuario();
-$usuario = htmlspecialchars($_POST['usuario'], ENT_QUOTES, 'UTF-8');
 
-$consulta = $MU->traerDatosUsuario($usuario);
-echo json_encode($consulta);
+$user = htmlspecialchars($_POST['user'], ENT_QUOTES, 'UTF-8');
+//echo '<script>console.log('.$user.')</script>';
 
+$consulta = $MU->traerDatosUsuario($user);
+echo $consulta;
+//echo memory_get_usage();
 
 
 

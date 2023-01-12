@@ -1,17 +1,20 @@
+var table = $('#tabla_cursos').DataTable();
+
 var listar_curso = function () {
 
     $.ajax({
         url: "../controlador/cursos/controlador_listar_cursos.php",
         type: 'POST',
     }).done(function (res) {
+        
         const dataNS = JSON.parse(res);
 
-
-        console.log(dataNS["data"])
+        console.log(res);
+        console.log(dataNS)
 
         table = $('#tabla_cursos').DataTable({
             'serverSide': false,
-            'ordering': false,
+            'ordering': true,
             'orderCellsTop': true,
             'fixedHeader': true,
             'paging': false,
@@ -32,7 +35,7 @@ var listar_curso = function () {
 
             'processing': true,
 
-            data: dataNS["data"],
+            data: dataNS,
             'columns': [{
                     data: 'cod_curso'
                 },
@@ -105,17 +108,19 @@ function registrar_curso() {
             descuento
         }
     }).done(function (resp) {
-        $('#modal_registro').modal('hide');
-        console.log('res:' + resp)
-        if (resp == '0') {
-            Swal.fire("Mensaje de advertencia ", "No hay un profesor registrado con este nombre", "warning")
-        }else if(resp == '2'){
-            Swal.fire("Mensaje de advertencia ", "No se ha podido introducir este curso en la base de datos", "warning")
-    
-        }else{
+        console.log(resp);
+        if(resp == ''){
             
-            listar_curso();
+            $('#modal_registro').modal('hide');
+            Swal.fire("Mensaje de confirmación ", "El curso ha sido registrado", "success");
+
+        table.destroy();
+        table = $('#tabla_cursos').DataTable();
+        }else{
+            Swal.fire("Mensaje de advertencia ", "No hay un profesor registrado con este nombre", "warning")
+        
         }
+        
     })
 }
 
@@ -189,9 +194,8 @@ function modificar_curso() {
         }
     }).done(function (resp) {
         
-        listar_curso();
         console.log(resp)
-        if (resp > 0) {
+        if (resp == '') {
             $('#modal_editar').modal('hide');
             return Swal.fire(
                 'Mensaje de confirmación',
@@ -199,7 +203,14 @@ function modificar_curso() {
                 'success'
             ).then(value => {
 
-                table.ajax(reload);
+                table.destroy();
+                table = $('#tabla_cursos').DataTable();
+                
+                console.log(value);
+                if (value.isConfirmed) {
+
+                    listar_curso();
+                }
             })
         } else {
             return Swal.fire({

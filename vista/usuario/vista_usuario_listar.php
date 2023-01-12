@@ -148,7 +148,7 @@
                     </div>
                     
                 <div class="row">
-                <div class="modal-body col-lg-12">
+                <div class="modal-body col-lg-12 tipousuClass">
                         <div class="col-lg-6">
                             <label for="cbm_tipousu">Tipo de usuario invitado</label>
                             <select class="form-control select2-tipousu select" name="cbm_tipousu" id="cbm_tipousu" style="width:100%;">
@@ -162,7 +162,7 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button class="btn btn-primary" onclick="registrar_usuario(); console.log('onclick');">Registrar</button>
-                    <button type="button" class="btn btn-danger" id="btn-modal-close" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" class="btn-modal-close" data-dismiss="modal">Cerrar</button>
                 </div>
 
             </div>
@@ -185,7 +185,7 @@
                 <div class="row">
                     <div class="modal-body col-lg-4">
                         <div class="col-lg-12">
-                            <input type="text" id="txtidusuario">
+                            <input type="text" id="txtidusuario" hidden>
                             <label for="txt_usu">Usuario</label>
                             <input type="text" class="form-control col-lg-24" id="txt_usu_editar" placeholder="Ingrese usuario" disabled><br>
                         </div>
@@ -219,7 +219,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="modal-body col-lg-6">
+                    <!--
+                        <div class="modal-body col-lg-6">
                         <div class="col-lg-12">
                             <label for="rol">Rol</label>
                             <select class="form-control select2-rol select" name="cbm_rol_editar" id="cbm_rol_editar" style="width:100%;">
@@ -227,7 +228,8 @@
                             </select><br><br>
                         </div>
                     </div>
-                    <div class="modal-body col-lg-6">
+-->
+                    <div class="modal-body col-lg-12">
                     <div class="col-lg-12">
                             <label for="cbm_sexo">Sexo<small>Valores permitidos 'MASCULINO' y 'FEMENINO'</small></label>
                               <label for="txt_sexo_editar" class="form-label"></label>
@@ -237,7 +239,7 @@
                             </div>
                     </div>
                 </div>
-                
+                <!--
                 <div class="row">
                     <div class="modal-body col-lg-12">
                         <div class="col-lg-12">
@@ -248,12 +250,12 @@
                         </div>
                     </div>
                 </div>
-
+-->
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button class="btn btn-primary" onclick="modificar_usuario(); console.log('onclick');">Modificar</button>
-                    <button type="button" class="btn btn-danger" id="btn-modal-close" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" class="btn-modal-close" data-dismiss="modal">Cerrar</button>
                 </div>
 
             </div>
@@ -325,7 +327,7 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button class="btn btn-primary" onclick="registrar_profesor(); console.log('onclick registrar');">Registrar Profesor</button>
-                    <button type="button" class="btn btn-danger" id="btn-modal-close" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-danger" class="btn-modal-close" data-dismiss="modal">Cerrar</button>
                 </div>
 
             </div>

@@ -1,11 +1,10 @@
 <?php
-require_once 'config/database.php';
-require_once 'config/config.php';
-$db = new Database();
-$con = $db->conectar();
+include '../../conexion.php';
+include '../../configuracion.php';
+
 $id = $_GET['idprod'];
 $token = $_GET['token'];
-$token_tmp = hash_hmac('sha1', $id, KEY_TOKEN);
+$token_tmp = hash_hmac('sha1', $id, KEY);
 echo $token_tmp;
 $ownprod = false;
 $idusuario = $_GET['idu'];
@@ -16,10 +15,12 @@ $idusuario = $_GET['idu'];
 $comparador = strcmp($token, $token_tmp);
 if ($comparador == 0) {
     $querycount = "SELECT count(cod_curso) FROM tfg.curso WHERE cod_curso='" . $id . "' AND estado='ACTIVO'";
-    $sql = $con->query($querycount);
+    $sql = $pdo->prepare($querycount);
+    $sql->execute();
     if ($sql->fetchColumn() > 0) {
-        $queryselectprod = "SELECT curso.nombre_curso, profesores.nombre, curso.descripcion, curso.precio_curso, curso.descuento, curso.fechapublicacion, curso.horas_curso, profesores.id_usuario_profesor, categoriascurso.nombrecat FROM tfg.curso INNER JOIN tfg.profesores ON curso.cod_profesor=profesores.id_profesor INNER JOIN tfg.categoriascurso ON curso.idcatfk=categoriascurso.idcat WHERE cod_curso='" . $id . "' AND estado='ACTIVO' LIMIT 1";
-        $consulta = $con->query($queryselectprod, TRUE);
+        $queryselectprod = "SELECT curso.nombre_curso, profesores.nombre, curso.descripcion, curso.precio_curso, curso.descuento, profesores.id_usuario_profesor FROM tfg.curso INNER JOIN tfg.profesores ON curso.cod_profesor=profesores.id_profesor WHERE cod_curso='" . $id . "' AND estado='ACTIVO' LIMIT 1";
+        $consulta = $pdo->prepare($queryselectprod);
+        $consulta->execute();
         $row = $consulta->fetch(PDO::FETCH_ASSOC);
         $nombre = $row['nombre_curso'];
         $descripcion = $row['descripcion'];
@@ -31,7 +32,6 @@ if ($comparador == 0) {
             $ownprod = true;
         }
 
-        $categoria = $row['nombrecat'];
         $precio_desc = $precio - (($precio * $descuento) / 100);
         $dir_images = 'images/productos/' . $id . '/';
         $rutaImg = $dir_images . 'principal.jpg';
@@ -54,7 +54,8 @@ if ($comparador == 0) {
 
         $queryselecttemas = "SELECT idtema, titulotema, descripciontema FROM tfg.temas WHERE idcursotema = '$id'";
         $arraytemas = array();
-        $consultatemas = $con->query($queryselecttemas, TRUE);
+        $consultatemas = $pdo->prepare($queryselecttemas);
+        $consultatemas->execute();
         while ($fila = $consultatemas->fetch(PDO::FETCH_ASSOC)) {
             $arraytemas[] = $fila;
         }
@@ -157,7 +158,7 @@ if ($comparador == 0) {
                 </div>
                 <div class="col-md-6 order-md-2">
                     <h2 class="curso-item-title"><?php echo $nombre; ?></h2>
-                    <p style="color: #000"><strong><?php echo $categoria; ?></strong></p>
+                    
                     <?php if ($descuento > 0) { ?>
                         <p class="curso-item-price" style="color: red"><del><?php echo MONEDA . number_format($precio, 2, ",", "."); ?></del></p>
                         <h2 class="curso-item-price">
@@ -283,14 +284,18 @@ if ($comparador == 0) {
                     <div class="row">
                         <div class="modal-body col-lg-4">
                             <div class="col-lg-12">
-                                <select class="form-control col-lg-6" id="txt_categoria" >
-                                    <?php $selectCategorias = 'SELECT * FROM categoriascurso';
+                            <!--    
+                            <select class="form-control col-lg-6" id="txt_categoria" >
+                                    <?php
+                                    /* $selectCategorias = 'SELECT * FROM categoriascurso';
                                     $consultacat = $con->query($selectCategorias);
                                     foreach($consultacat as $cat){
                                         echo '<option value="'.$cat['nombrecat'].'">'.$cat['nombrecat'].'</option>';
                                     }
+                                    */
                                     ?>
                                 </select>
+                                -->
                             </div>
                         </div>
 

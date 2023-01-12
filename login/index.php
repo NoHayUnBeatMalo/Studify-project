@@ -1,11 +1,11 @@
 <?php
 session_start();
-if (isset($_SESSION['S_IDUSUARIO']) && $_SESSION['S_ROL'] == 'INVITADO')  {
+if (isset($_SESSION['S_IDUSUARIO']) && $_SESSION['S_ROL'] == '1')  {
 	header('Location: ../vista/index.php');
-}else if(isset($_SESSION['S_IDUSUARIO']) && $_SESSION['S_ROL'] == 'ADMINISTRADOR'){
-	header('Location: ../inicio/index.php');
+}else if(isset($_SESSION['S_IDUSUARIO']) && $_SESSION['S_ROL'] == '2'){
+	header('Location: ../inicio/index.php?username='.$_SESSION['S_IDUSUARIO']);
 }
-
+echo '<script>console.log("dentro del index del login")</script>';
 
 ?>
 

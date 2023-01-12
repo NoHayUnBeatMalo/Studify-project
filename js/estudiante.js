@@ -10,20 +10,23 @@ function validarCodigoPostal()
         alert("codigo invalido");
     }
 }
+var table = $('#tabla_estudiante').DataTable();
+
 var listar_estudiante = function () {
 
     $.ajax({
         url: "../controlador/estudiantes/controlador_listar_estudiantes.php",
         type: 'POST',
     }).done(function (res) {
+        
         const dataNS = JSON.parse(res);
 
-
-        console.log(dataNS)
+        console.log(res);
+        console.log(dataNS["data"])
 
         table = $('#tabla_estudiante').DataTable({
             'serverSide': false,
-            'ordering': false,
+            'ordering': true,
             'orderCellsTop': true,
             'fixedHeader': true,
             'paging': false,
@@ -104,17 +107,23 @@ function modificar_estudiante() {
             idest, poblacion, provincia, codpostal, tel
         }
     }).done(function (resp) {
-        listar_estudiante();
         
         console.log(resp)
-        if (resp > 0) {
+        if (resp == '') {
             $('#modal_editar').modal('hide');
             return Swal.fire(
                 'Mensaje de confirmación',
                 'Datos correctamente actualizados en el sistema.',
                 'success'
             ).then(value => {
-                table.ajax(reload);
+                table.destroy();
+                table = $('#tabla_estudiante').DataTable();
+                
+                console.log(value);
+                if (value.isConfirmed) {
+
+                    listar_estudiante();
+                }
             })
         } else {
             return Swal.fire({

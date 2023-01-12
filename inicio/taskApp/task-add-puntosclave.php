@@ -1,19 +1,23 @@
 <?php
-include_once '../../modelo/modelo_conexion.php';
-$con = new conexion;
-$con->conectar();
+include_once '../../conexion.php';
 
-if(isset($_POST['nuevoitem']) && isset($_POST['idusuario']) && isset($_POST['idpuntoclave'])){
+
+if(isset($_POST['nuevoitem']) && isset($_POST['idusuario']) && isset($_POST['idtarea']) && isset($_POST['idpuntoclave'])){
     $idpuntoclave = $_POST['idpuntoclave'];
+    $idtarea = $_POST['idtarea'];
     //obtenemos el array de puntos 
-    $queryselectarray = "SELECT arraypc FROM puntosclave WHERE idpclave= '$idpuntoclave';";
+    $queryselectarray = "SELECT puntoclave FROM puntosclave WHERE idpclave= '$idpuntoclave' AND idtarea='$idtarea';";
+
     //consulta
-    $resselect = $con->consulta($queryselectarray);
-    if(!$resselect){
+    $resselect = $pdo->prepare($queryselectarray);
+    $resselect->execute();
+    $resultadoselect = $resselect->fetchAll(PDO::FETCH_ASSOC);
+
+    
         //extraer registro
-        while($fila = $con->extraer_registro()){
-            $lista = $fila['arraypc'];
-        }
+        
+            $lista = $resultadoselect['puntoclave'];
+        
 
         $namepc = $_POST['nuevoitem'];
         $idusuario = $_POST['idusuario'];
@@ -22,18 +26,14 @@ if(isset($_POST['nuevoitem']) && isset($_POST['idusuario']) && isset($_POST['idp
         if($lista != $namepc){
             $addtolist = $lista . ', ' . $namepc;
             //update array
-            $query = "UPDATE puntosclave SET arraypc = '$addtolist' WHERE idpclave = '$idpuntoclave'";
-            $result = $con->consulta($query);
-            if(!$result){
+            $query = "INSERT INTO puntosclave (arraypc, idtarea, idusuario) VALUES ('$addtolist', '$idtarea', '$idusuario')";
+            $updatePC = $pdo->prepare($query);
+            $updatePC->execute();
+            if($updatePC){
                 echo 1;
             }
         }
         
-    }else{
-        echo 0;
-    }
+    
 
 }
-
-
-?>

@@ -16,23 +16,3 @@ function addProducto(id, token) {
         })
 
     
-}
-function addCurso() {
-    const url = 'clases/addcurso.php';
-
-    let formData = new FormData();
-    formData.append('id', id);
-    console.log(formData)
-    console.log(id)
-    fetch(url, {
-            method: 'POST',
-            body: formData,
-        }).then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if (data.ok) {
-                let elemento = document.getElementById('num_cart');
-                elemento.innerHTML = data.numero;
-            }
-        })
-}
